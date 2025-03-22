@@ -120,7 +120,7 @@ const RandomProducts = () => {
                     <div className="flex flex-col gap-y-2 mt-3">
                       <button
                         className="bg-brandOrange border border-brandOrange w-full text-white text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => addToCart(product)}
+                        onClick={() => addToCart(product, 1)}
                       >
                         Add To Cart
                       </button>
