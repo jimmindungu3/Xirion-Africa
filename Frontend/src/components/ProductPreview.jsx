@@ -71,7 +71,7 @@ const ProductPreview = () => {
                   <img
                     src={selectedImage}
                     alt={product.title}
-                    className="w-full h-full max-h-[200px] object-contain"
+                    className="w-full min-h-20 max-h-60 object-contain"
                   />
                 </div>
               </div>
