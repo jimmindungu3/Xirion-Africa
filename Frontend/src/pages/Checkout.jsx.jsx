@@ -227,32 +227,33 @@ const Checkout = () => {
                 <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">
                   Select a payment method
                 </h3>
-                <div className="flex gap-4 mb-4">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("mpesa")}
-                    className={`flex-1 py-3 px-4 rounded-lg border ${
-                      paymentMethod === "mpesa"
-                        ? "border-green-400 bg-green-200"
-                        : "border-gray-300"
-                    } flex items-center justify-center gap-2 hover:bg-green-100  transition`}
-                  >
-                    <FaMobile className="text-gray-700" />
-                    <span className="font-medium">M-Pesa</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("card")}
-                    className={`flex-1 py-3 px-4 rounded-lg border ${
-                      paymentMethod === "card"
-                        ? "border-orange-500 bg-orange-50"
-                        : "border-gray-300"
-                    } flex items-center justify-center gap-2 hover:bg-orange-50 transition`}
-                  >
-                    <FaCreditCard className="text-gray-700" />
-                    <span className="font-medium">Credit/Debit Card</span>
-                  </button>
-                </div>
+                <div className="flex gap-2 md:gap-4 mb-4 flex-nowrap">
+  <button
+    type="button"
+    onClick={() => setPaymentMethod("mpesa")}
+    className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
+      paymentMethod === "mpesa"
+        ? "border-green-400 bg-green-200"
+        : "border-gray-300"
+    } flex items-center justify-center gap-2 hover:bg-green-100 transition text-nowrap`}
+  >
+    <FaMobile className="text-gray-700" />
+    <span className="font-medium">M-Pesa</span>
+  </button>
+  <button
+    type="button"
+    onClick={() => setPaymentMethod("card")}
+    className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
+      paymentMethod === "card"
+        ? "border-orange-500 bg-orange-50"
+        : "border-gray-300"
+    } flex items-center justify-center gap-2 hover:bg-orange-50 transition text-nowrap`}
+  >
+    <FaCreditCard className="text-gray-700" />
+    <span className="font-medium">Credit/Debit Card</span>
+  </button>
+</div>
+
 
                 {/* Card Payment Form */}
                 {paymentMethod === "card" && (
@@ -334,7 +335,7 @@ const Checkout = () => {
           {/* Order Summary */}
           <div className="md:col-span-2">
             <div className="border p-4 rounded-lg h-fit sticky top-4 md:top-16">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
                 Order Summary
               </h3>
 
@@ -391,7 +392,7 @@ const Checkout = () => {
               <button
                 type="submit"
                 form="checkoutForm"
-                className="w-full bg-brandOrange text-white py-3 font-semibold rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2"
+                className="w-full bg-brandOrange text-white text-base py-3 font-semibold rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2"
               >
                 <FaLock size={14} />
                 Pay KSh {getTotalPrice().toLocaleString()}

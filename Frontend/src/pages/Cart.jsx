@@ -102,7 +102,7 @@ const Cart = () => {
                   ))}
                 </div>
                 <Link to={"/"}>
-                  <button className="mt-4 p-2 rounded-md font-semibold bg-brandOrange text-white hover:bg-orange-600 transition-all">
+                  <button className="mt-4 p-2 rounded-md font-semibold bg-brandOrange text-white text-sm md:text-base hover:bg-orange-600 transition-all">
                     <span className="flex items-center">
                       <FaAngleLeft /> Shop Some More
                     </span>
@@ -127,7 +127,7 @@ const Cart = () => {
             </div>
             {cart.length != 0 && (
               <Link to={"/checkout"}>
-                <button className="w-full bg-orange-500 text-white py-2 font-semibold rounded-lg hover:bg-orange-600 transition">
+                <button className="w-full bg-orange-500 text-white text-sm md:text-base py-2 font-semibold rounded-lg hover:bg-orange-600 transition">
                   <span className="flex gap-2 items-center justify-center">
                     <MdOutlineShoppingCartCheckout />
                     Checkout

@@ -47,14 +47,16 @@ const TopSellers = () => {
 
   // Skeleton loader component
   const ProductSkeleton = () => (
-    <div className="product-card group bg-white shadow-sm rounded-lg p-2">
-      <div className="relative mb-2 max-w-[150px] sm:max-w-[180px] mx-auto">
-        <div className="w-full aspect-square bg-gray-200 animate-pulse rounded-lg" />
+    <div className="product-card h-full bg-white shadow-sm rounded-lg p-2">
+      <div className="relative mb-2 h-40 max-w-[160px] mx-auto">
+        <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
       </div>
       <div className="text-center">
         <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mt-2 animate-pulse" />
-        <div className="h-3 bg-gray-200 rounded w-1/4 mx-auto mt-1 animate-pulse" />
+        <div className="h-8 bg-gray-200 rounded w-full mx-auto mt-1 animate-pulse" />
+        <div className="h-4 bg-gray-200 rounded w-1/4 mx-auto mt-2 animate-pulse" />
         <div className="h-6 bg-gray-200 rounded-full w-2/4 mx-auto mt-2 animate-pulse" />
+        <div className="h-8 bg-gray-200 rounded w-full mx-auto mt-2 animate-pulse" />
       </div>
     </div>
   );
@@ -87,7 +89,9 @@ const TopSellers = () => {
       </style>
 
       <div className="flex items-center justify-between mt-4 mb-4">
-        <h2 className="text-base md:text-xl lg:text-2xl font-bold text-gray-900">Top Sellers</h2>
+        <h2 className="text-base md:text-xl lg:text-2xl font-bold text-gray-900">
+          Top Sellers
+        </h2>
       </div>
 
       {error ? (
@@ -104,61 +108,54 @@ const TopSellers = () => {
           loop={!loading}
           className="pb-6"
           breakpoints={{
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
             1024: { slidesPerView: 5 },
           }}
         >
           {loading
             ? [...Array(5)].map((_, index) => (
-                <SwiperSlide key={`skeleton-${index}`}>
+                <SwiperSlide key={`skeleton-${index}`} className="h-auto">
                   <ProductSkeleton />
                 </SwiperSlide>
               ))
             : bestSellers.map((product) => (
-                <SwiperSlide key={product._id}>
-                  <div className="product-card group rounded-lg p-2 border hover:shadow-md transition flex flex-col">
-                    {/* Product Image */}
-                    <div className="relative mb-2 max-w-[160px] sm:max-w-[200px] mx-auto">
-                      <div className="w-full aspect-square rounded-lg flex items-center justify-center overflow-hidden text-xs bg-gray-100">
+                <SwiperSlide key={product._id} className="h-auto">
+                  <div className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition">
+                    {/* Product Image - Fixed height */}
+                    <div className="mb-2 h-28 md:h-40 w-full max-w-[160px] sm:max-w-[200px] mx-auto">
+                      <div className="w-full h-full rounded-lg flex items-center justify-center overflow-hidden text-xs bg-gray-100">
                         {product.images && product.images.length > 0 ? (
                           <img
                             src={product.images[0]}
                             alt={product.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain bg-white rounded-md"
                           />
                         ) : (
-                          <span className="text-gray-500 text-sm">
-                            No Image
-                          </span>
+                          <div className="text-gray-500 text-sm">No Image</div>
                         )}
                       </div>
-                      {/* Bestseller Tag */}
-                      {product.sales > 0 && (
-                        <span className="absolute top-1 left-1 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-medium">
-                          Bestseller
-                        </span>
-                      )}
                     </div>
 
                     {/* Product Details */}
-                    <div className="px-2 flex-grow flex flex-col">
-                      <h3 className="font-semibold text-sm text-gray-900 group-hover:text-gray-900 transition">
+                    <div className="px-2 flex flex-col flex-grow">
+                      {/* Title - Fixed height */}
+                      <h3 className="font-semibold text-sm text-gray-900 line-clamp-1">
                         {product.title}
                       </h3>
-                      <p className="text-gray-500 text-xs mt-1 flex-grow">
-                        {product.description.slice(0, 80)}...
+
+                      {/* Description  */}
+                      <p className="text-gray-500 text-xs mt-1 line-clamp-2">
+                        {product.description}
                       </p>
 
-                      <span>
-                        {/* Price */}
-                        <p className="text-brandOrange font-bold mt-1 text-sm">
+                      {/* Price & Stock - Fixed section */}
+                      <div className="mt-2 mb-2">
+                        <p className="text-brandOrange font-bold text-sm">
                           Ksh. {product.price.toLocaleString()}
                         </p>
-
-                        {/* Stock Availability */}
                         <p
-                          className={`mt-1 text-xs font-medium ${
+                          className={`text-xs font-medium ${
                             product.quantity > 0
                               ? "text-green-600"
                               : "text-red-600"
@@ -166,22 +163,24 @@ const TopSellers = () => {
                         >
                           {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                         </p>
-                      </span>
+                      </div>
 
-                      {/* Shop Now Button */}
-                      <div className="flex flex-col gap-y-2 mt-3">
-                        <button
-                          className="bg-brandOrange border border-brandOrange w-full text-white text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => addToCart(product, 1)}
-                        >
-                          Add To Cart
-                        </button>
-                        <button
-                          className="border border-brandOrange w-full text-brandOrange text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => handleProductPreview(product)}
-                        >
-                          More Details
-                        </button>
+                      {/* Buttons - Fixed height section */}
+                      <div className="mt-auto">
+                        <div className="flex flex-col gap-y-2">
+                          <button
+                            className="bg-brandOrange border border-brandOrange w-full text-white text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => addToCart(product, 1)}
+                          >
+                            Add To Cart
+                          </button>
+                          <button
+                            className="border border-brandOrange w-full text-brandOrange text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleProductPreview(product)}
+                          >
+                            More Details
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

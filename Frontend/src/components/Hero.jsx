@@ -63,7 +63,7 @@ const Hero = () => {
   return (
     <div className="max-w-7xl mx-auto hidden md:flex pt-4 mb-6">
       {/* Left Column: Categories */}
-      <div className="w-1/4 bg-white shadow-sm max-h-[490px] overflow-y-auto">
+      <div className="w-1/4 bg-white shadow-md max-h-[490px] overflow-y-auto">
         {categories.map((category, index) => (
           <div
             key={index}
@@ -77,7 +77,7 @@ const Hero = () => {
       </div>
 
       {/* Right Column: Image Slider */}
-      <div className="w-3/4 ml-4 overflow-hidden">
+      <div className="w-3/4 ml-4 overflow-hidden shadow-md">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           autoplay={{ delay: 4000 }}

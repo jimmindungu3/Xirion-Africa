@@ -45,13 +45,13 @@ const ProductPreview = () => {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Product Images */}
-              <div className="flex gap-4">
+              <div className="flex gap-1 md:gap-2">
                 {product.images?.length > 0 && (
                   <div className="flex flex-col gap-2 w-16">
                     {product.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`aspect-square cursor-pointer rounded-md overflow-hidden border-2 ${
+                        className={`aspect-square cursor-pointer rounded-md w-12 md:w-full overflow-hidden border bg-white ${
                           selectedImage === img
                             ? "border-brandOrange"
                             : "border-transparent"
@@ -60,28 +60,28 @@ const ProductPreview = () => {
                       >
                         <img
                           src={img}
-                          alt={`View ${index + 1}`}
+                          alt={product.title}
                           className="w-full h-full object-cover"
                         />
                       </div>
                     ))}
                   </div>
                 )}
-                <div className="flex-1 aspect-square rounded-lg overflow-hidden border border-gray-200">
+                <div className="flex-1">
                   <img
                     src={selectedImage}
                     alt={product.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full max-h-[200px] object-contain"
                   />
                 </div>
               </div>
 
               {/* Product Information */}
-              <div className="space-y-4">
-                <h1 className="text-2xl font-bold text-gray-900">
+              <div className="space-y-">
+                <h1 className="text-base md:text-lg font-bold text-gray-900">
                   {product.title}
                 </h1>
-                <p className="text-3xl font-bold text-brandOrange">
+                <p className="text-base md:text-lg font-bold text-brandOrange">
                   Ksh. {product.price.toLocaleString()}
                 </p>
                 <p className="mt-2 text-gray-600 text-sm">
@@ -103,10 +103,10 @@ const ProductPreview = () => {
                 </div>
 
                 {/* Buttons */}
-                <div className="mt-6 flex space-x-2 md:space-x-6 font-semibold">
+                <div className="mt-6 flex space-x-4 md:space-x-8 font-semibold text-sm md:text-base">
                   <button
                     onClick={() => addToCart(product, quantity)}
-                    className="flex-1 bg-brandOrange text-white  py-2 md:py-3 px-1 md:px-4 rounded-lg hover:bg-orange-600 transition"
+                    className="flex-1 bg-brandOrange text-white rounded-lg hover:bg-orange-600 transition"
                   >
                     Add to Cart
                   </button>

@@ -8,7 +8,7 @@ export default {
       //   roboto: ["Roboto", "manrope"],
       // },
       colors: {
-        brandOrange: "#FF6600",
+        brandOrange: "#f7721b",
       },
     },
   },
