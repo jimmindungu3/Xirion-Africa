@@ -90,8 +90,8 @@ const SearchOrCategory = () => {
       <div className="max-w-7xl mx-auto px-2 py-6">
         <div className="flex items-center justify-between mb-4">
           {pageTitle && (
-            <h2 className="text-xl font-bold text-brandOrange">{pageTitle}</h2>
-          )}
+            <h2 className="text-xl font-bold text-gray-900">{pageTitle}</h2>
+          )}      
         </div>
 
         {loading ? (

@@ -71,26 +71,26 @@ const TopRibbon = () => {
   }, []);
 
   return (
-    <div className="bg-gray-200 sticky top-0 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center py-3 md:pr-6">
+    <div className="bg-gray-200 sticky top-0 z-50 shadow-md text-sm md:text-base">
+      <div className="max-w-7xl mx-auto flex justify-between items-center py-2 md:py-3 md:pr-6">
         {/* Left: Categories */}
         <div ref={categoriesRef} className="relative">
           <div
             className="flex items-center space-x-2 cursor-pointer hover:bg-gray-300 px-3 py-2 rounded-md"
             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
           >
-            <FaBars className="text-xl" />
+            <FaBars className="text-sm md:text-lg" />
             <span className="hidden sm:inline font-medium">Categories</span>
           </div>
           {isCategoriesOpen && (
-            <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-md overflow-hidden z-50">
+            <div className="absolute left-0 mt-2 w-64 bg-gray-100 rounded-lg shadow-md overflow-hidden z-50">
               {categories.map((category, index) => (
                 <Link
                   key={index}
                   to={`/products?category=${encodeURIComponent(
                     category.title
                   )}`}
-                  className="block px-4 py-2 border-b hover:bg-gray-100"
+                  className="block px-4 py-2 border-b border-white hover:bg-gray-100"
                   onClick={() => setIsCategoriesOpen(false)}
                 >
                   <span className="font-medium">{category.title}</span>
@@ -101,7 +101,7 @@ const TopRibbon = () => {
         </div>
 
         {/* Middle: Search Bar */}
-        <div className="flex items-center border border-gray-400 rounded-lg overflow-hidden h-10 w-full mx-4 lg:max-w-2xl">
+        <div className="flex items-center border border-gray-400 rounded-lg overflow-hidden h-6 md:h-10 w-full mx-4 lg:max-w-2xl">
           <form
             onSubmit={handleSearch}
             className="flex items-center rounded-lg overflow-hidden h-10 w-full lg:max-w-2xl"
@@ -109,7 +109,7 @@ const TopRibbon = () => {
             <input
               id="search"
               type="text"
-              placeholder="Search Products Here"
+              placeholder="Search"
               className="px-3 w-full outline-none h-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -130,10 +130,11 @@ const TopRibbon = () => {
             to="/cart"
             className="relative flex items-center space-x-2 cursor-pointer px-3 py-2 rounded-md hover:bg-gray-300"
           >
-            <FaShoppingCart className="text-xl" />
+            <FaShoppingCart className="text-base md:text-lg lg:text-xl" />
             <span className="hidden sm:inline font-medium">Cart</span>
 
-            <span className="absolute -top-1 -right-2 bg-brandOrange text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+            <span className="absolute -top-0.5 md:-top-1 -right-1 md:-right-2 bg-brandOrange text-white text-xs font-semibold 
+            px-1 md:px-2 md:py-0.5 rounded-full">
               {cartItemCount || 0}
             </span>
           </Link>
@@ -144,7 +145,7 @@ const TopRibbon = () => {
               className="flex items-center space-x-2 cursor-pointer px-3 py-2 rounded-md hover:bg-gray-300"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <FaUser className="text-xl" />
+              <FaUser className="text-base md:text-lg" />
               <span className="hidden sm:inline font-medium">
                 {signedInStatus ? initials : "Account"}
               </span>

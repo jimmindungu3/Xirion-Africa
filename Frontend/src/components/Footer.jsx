@@ -7,13 +7,13 @@ const Footer = () => {
   const { signedInStatus } = useContext(SignedInStatusContext);
 
   return (
-    <footer className="bg-gray-800 text-white text-sm py-10 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <footer className="text-sm md:text-base border-b border-gray-700">
+      <div className="bg-gray-800 py-6 px-4 ">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {/* My Account */}
           <div>
-            <h3 className="font-bold">My account</h3>
-            <ul className="mt-2 space-y-2">
+            <h3 className="font-bold text-white">My account</h3>
+            <ul className="mt-2 text-gray-300">
               <li>
                 {signedInStatus ? (
                   <span className="text-gray-500 cursor-not-allowed">
@@ -37,8 +37,8 @@ const Footer = () => {
 
           {/* About Us */}
           <div>
-            <h3 className="font-bold">About Us</h3>
-            <ul className="mt-2 space-y-2">
+            <h3 className="font-bold text-white">About Us</h3>
+            <ul className="mt-2 text-gray-200">
               <li>
                 <a href="#" className="hover:underline">
                   Our Story
@@ -59,7 +59,7 @@ const Footer = () => {
 
           {/* Social links */}
           <div>
-            <h3 className="font-bold">Connect With Us</h3>
+            <h3 className="font-bold text-white">Connect With Us</h3>
             <div className="mt-2 flex space-x-4">
               <a href="#" className="text-blue-600 text-2xl">
                 <FaFacebook />
@@ -78,18 +78,22 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="font-bold">Contact Us</h3>
-            <p className="mt-2">+254-717-055-495</p>
-            <p>+254-789-335-955</p>
-            <a
-              href="mailto:email@xirionafrica.com"
-              className="text-blue-400 hover:underline cursor-pointer"
-            >
-              email@xirionafrica.com
-            </a>
+            <h3 className="font-bold text-white">Contact Us</h3>
+            <div className="text-gray-300">
+              <p className="mt-2">+254-717-055-495</p>
+              <p>+254-789-335-955</p>
+              <a
+                href="mailto:email@xirionafrica.com"
+                className="text-blue-400 hover:underline cursor-pointer"
+              >
+                email@xirionafrica.com
+              </a>
+            </div>
           </div>
         </div>
-        <p className="text-sm mt-6">&copy; 2011 - 2025 Xirion Africa&reg;</p>
+      </div>
+      <div className="text-sm text-gray-300 flex justify-center items-center bg-gray-950 h-10 md:h-12">
+        &copy; {new Date().getFullYear()} Xirion Africa&reg;
       </div>
     </footer>
   );

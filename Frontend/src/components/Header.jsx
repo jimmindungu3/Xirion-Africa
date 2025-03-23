@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="max-w-7xl mx-auto flex justify-between items-center p-3">
+    <header className="max-w-7xl mx-auto flex justify-between items-center p-2 md:p-3">
       {/* Logo */}
-      <Link to={"/"} className="text-3xl flex items-center space-x-2 text-brandOrange">
+      <Link to={"/"} className="text-lg md:text-2xl lg:text-3xl flex items-center space-x-2 text-brandOrange">
         <GiCircuitry />
         <span>
           <span className="font-bold">XIR</span>ION
@@ -15,10 +15,10 @@ const Header = () => {
       </Link>
 
       {/* Contact Section */}
-      <div className="flex flex-col md:flex-row md:gap-x-6">
+      <div className="flex flex-col md:flex-row md:gap-x-6 text-xs md:text-lg">
         {/* Clickable Call */}
         <a href="tel:+254717055495" className="flex items-center space-x-2 hover:text-green-600">
-          <FaPhoneAlt className="text-green-600 text-lg" />
+          <FaPhoneAlt className="text-green-600" />
           <span className="text-gray-500 font-semibold">+254 717 055 495</span>
         </a>
 
@@ -29,7 +29,7 @@ const Header = () => {
           rel="noopener noreferrer"
           className="flex items-center space-x-2 hover:text-green-600"
         >
-          <FaWhatsapp className="text-green-600 text-lg" />
+          <FaWhatsapp className="text-green-600" />
           <span className="text-gray-500 font-semibold">+254 789 335 955</span>
         </a>
       </div>
