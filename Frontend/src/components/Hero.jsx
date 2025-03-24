@@ -12,6 +12,10 @@ const categories = [
     items: "Laptops, Keyboards, Monitors, External Drives, Software",
   },
   {
+    title: "Phones",
+    items: "Smartphones, Feature Phones, Chargers, Phone Cases,",
+  },
+  {
     title: "Gaming",
     items: "Consoles, Gaming Laptops, Controllers, VR Headsets, Accessories",
   },

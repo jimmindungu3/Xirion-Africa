@@ -67,11 +67,11 @@ const ProductPreview = () => {
                     ))}
                   </div>
                 )}
-                <div className="flex-1">
+                <div className="flex-1 h-[240px] md:h-[480px]">
                   <img
                     src={selectedImage}
                     alt={product.title}
-                    className="w-full min-h-20 max-h-60 object-contain"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>
