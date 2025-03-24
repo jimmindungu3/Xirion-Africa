@@ -7,7 +7,7 @@ const Footer = () => {
   const { signedInStatus } = useContext(SignedInStatusContext);
 
   return (
-    <footer className="text-sm md:text-base border-b border-gray-700">
+    <footer className="text-sm md:text-base">
       <div className="bg-gray-800 py-6 px-4 ">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {/* My Account */}

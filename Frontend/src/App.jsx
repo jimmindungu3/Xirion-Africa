@@ -13,7 +13,7 @@ import ProductPreview from "./components/ProductPreview";
 import Cart from "./pages/Cart";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import SearchOrCategory from "./components/SearchOrCategory";
-import { ToastContainer, Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Checkout from "./pages/Checkout.jsx";
 
 // Contexts
@@ -22,7 +22,9 @@ export const CartContext = createContext();
 export const WishlistContext = createContext();
 
 const App = () => {
-  // Signed-in status
+  // States
+  const [cart, setCart] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const [signedInStatus, setSignedInStatus] = useState(
     localStorage.getItem("signedInStatus") === "true"
   );
@@ -43,9 +45,6 @@ const App = () => {
     setCart([]);
     setWishlist([]);
   };
-
-  // Cart State
-  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("xirionCart")) || [];
@@ -98,9 +97,6 @@ const App = () => {
     toast.error(`${product.title} removed from cart`);
   };
 
-  // Wishlist State
-  const [wishlist, setWishlist] = useState([]);
-
   useEffect(() => {
     const savedWishlist =
       JSON.parse(localStorage.getItem("xirionWishlist")) || [];
@@ -129,19 +125,7 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
+      
       <SignedInStatusContext.Provider
         value={{ signedInStatus, handleSignedInStatus, handleSignOut }}
       >
