@@ -65,6 +65,9 @@ const SignUp = () => {
     }
   };
 
+  const inputStyles =
+    "w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500";
+
   return (
     <section className="pt-2 md:pt-12 flex items-center justify-center">
       <div className="w-full bg-white rounded-lg shadow-md sm:max-w-md p-6 border">
@@ -81,7 +84,7 @@ const SignUp = () => {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className={inputStyles}
               placeholder="John"
               required
             />
@@ -95,7 +98,7 @@ const SignUp = () => {
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className={inputStyles}
               placeholder="Doe"
               required
             />
@@ -109,7 +112,7 @@ const SignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className={inputStyles}
               placeholder="john@example.com"
               required
             />
@@ -128,7 +131,7 @@ const SignUp = () => {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className={inputStyles}
               placeholder="0712345678"
               required
             />
@@ -144,7 +147,7 @@ const SignUp = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10"
+                className={inputStyles}
                 placeholder="••••••••"
                 required
               />
@@ -168,7 +171,7 @@ const SignUp = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-10"
+                className={inputStyles}
                 placeholder="••••••••"
                 required
               />

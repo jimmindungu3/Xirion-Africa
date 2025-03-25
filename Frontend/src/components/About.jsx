@@ -42,7 +42,7 @@ const About = () => {
               id="email"
               type="email"
               placeholder="Enter your email"
-              className="w-full p-2 mt-2 border rounded text-sm md:text-base"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500 text-sm md:text-base"
             />
             <button className="mt-3 px-4 py-2 text-gray-50 text-sm md:text-base border border-gray-500 bg-gray-500 hover:bg-gray-50 hover:text-gray-500 active:bg-gray-500 active:text-gray-50 rounded font-semibold transition-colors">
               Subscribe

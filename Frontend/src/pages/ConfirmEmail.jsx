@@ -65,7 +65,7 @@ const ConfirmEmail = () => {
               name="code"
               value={verificationCode}
               onChange={(e) => setverificationCode(e.target.value)}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500"
               placeholder="Enter code"
               required
             />

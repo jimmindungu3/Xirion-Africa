@@ -18,10 +18,15 @@ const EditAccount = () => {
     // Add API call logic here
   };
 
+  const inputStyles =
+    "w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500";
+
   return (
     <div className="flex items-center justify-center pt-2 md:pt-20 p-4">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Edit Account</h2>
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
+          Edit Account
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -29,7 +34,7 @@ const EditAccount = () => {
             value={formData.firstName}
             onChange={handleChange}
             placeholder="First Name"
-            className="w-full p-2 border border-gray-300 rounded"
+            className={inputStyles}
           />
           <input
             type="text"
@@ -37,7 +42,7 @@ const EditAccount = () => {
             value={formData.lastName}
             onChange={handleChange}
             placeholder="Last Name"
-            className="w-full p-2 border border-gray-300 rounded"
+            className={inputStyles}
           />
           <input
             type="email"
@@ -45,7 +50,7 @@ const EditAccount = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full p-2 border border-gray-300 rounded"
+            className={inputStyles}
           />
           <input
             type="text"
@@ -53,18 +58,18 @@ const EditAccount = () => {
             value={formData.phoneNumber}
             onChange={handleChange}
             placeholder="Phone Number"
-            className="w-full p-2 border border-gray-300 rounded"
+            className={inputStyles}
           />
           <div className="flex justify-between">
             <button
               type="submit"
-              className="bg-brandOrange text-white py-2 px-4 rounded"
+              className="bg-brandOrange font-semibold text-white py-2 px-4 rounded"
             >
               Save Changes
             </button>
             <button
               type="button"
-              className="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500"
+              className="bg-gray-400 font-semibold text-white py-2 px-4 rounded hover:bg-gray-500"
               onClick={() => console.log("Cancel edits")}
             >
               Cancel

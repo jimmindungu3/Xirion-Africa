@@ -25,7 +25,7 @@ const Checkout = () => {
     cardExpiry: "",
     cardCVC: "",
     mpesaNumber: "",
-    order: [], 
+    order: [],
   });
 
   // Cities in Kenya with their shipping fees
@@ -119,10 +119,15 @@ const Checkout = () => {
     );
   }
 
+  const inputStyles =
+    "w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500";
+
   return (
     <>
       <div className="max-w-7xl mx-auto p-4 my-8 border shadow-sm rounded-lg">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Checkout</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+          Checkout
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Main Column: Form */}
@@ -145,7 +150,7 @@ const Checkout = () => {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className={inputStyles}
                     />
                   </div>
                   <div>
@@ -159,7 +164,7 @@ const Checkout = () => {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className={inputStyles}
                     />
                   </div>
                 </div>
@@ -176,7 +181,7 @@ const Checkout = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className={inputStyles}
                     />
                   </div>
 
@@ -191,7 +196,7 @@ const Checkout = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className={inputStyles}
                     />
                   </div>
                 </div>
@@ -206,7 +211,7 @@ const Checkout = () => {
                       value={formData.city}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-800 appearance-none"
+                      className={inputStyles}
                     >
                       <option value="">Select City/Town</option>
                       {kenyanCities.map((city) => (
@@ -265,7 +270,7 @@ const Checkout = () => {
                         onChange={handleInputChange}
                         placeholder="1234 5678 9012 3456"
                         required={paymentMethod === "card"}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className={inputStyles}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -280,7 +285,7 @@ const Checkout = () => {
                           onChange={handleInputChange}
                           placeholder="MM/YY"
                           required={paymentMethod === "card"}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className={inputStyles}
                         />
                       </div>
                       <div>
@@ -294,7 +299,7 @@ const Checkout = () => {
                           onChange={handleInputChange}
                           placeholder="123"
                           required={paymentMethod === "card"}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className={inputStyles}
                         />
                       </div>
                     </div>
@@ -315,7 +320,7 @@ const Checkout = () => {
                         onChange={handleInputChange}
                         placeholder="07XX XXX XXX"
                         required={paymentMethod === "mpesa"}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className={inputStyles}
                       />
                       <p className="mt-2 text-sm text-gray-600">
                         You will receive an STK push to complete payment once
@@ -343,16 +348,22 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Shipping Fee:</span>
-                  <span>{formData.city ? `Ksh. ${shippingFee.toLocaleString()}` : "Select city to calculate"}</span>
+                  <span>
+                    {formData.city
+                      ? `Ksh. ${shippingFee.toLocaleString()}`
+                      : "Select city to calculate"}
+                  </span>
                 </div>
                 <div className="border-t pt-2 mt-2 flex justify-between font-semibold">
                   <span>Total:</span>
-                  <span className="text-orange-600">KSh {getTotalPrice().toLocaleString()}</span>
+                  <span className="text-orange-600">
+                    KSh {getTotalPrice().toLocaleString()}
+                  </span>
                 </div>
               </div>
 
               {/* Order Items */}
-              <div className="mb-4 max-h-40 md:max-h-60 overflow-y-auto">
+              <div className="mb-4 max-h-40 md:max-h-60 overflow-y-auto pr-2">
                 <h4 className="text-sm font-medium text-gray-700 mb-2">
                   Your cart Items:
                 </h4>
@@ -364,7 +375,7 @@ const Checkout = () => {
                     <img
                       src={item.product?.images?.[0] || item.product.image}
                       alt={item.product.title}
-                      className="w-10 h-10 rounded object-cover"
+                      className="w-10 h-10 rounded object-cover md:mr-4"
                     />
                     <div className="flex-1">
                       <p className="text-xs font-medium text-gray-800">
