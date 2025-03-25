@@ -119,15 +119,17 @@ const Cart = () => {
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               Order Summary
             </h2>
-            <div className="text-base flex justify-between items-center mb-2">
-              <span className="font-semibold text-gray-800">
-                Products In Cart:
-              </span>
+            <div className="text-sm flex justify-between items-center mb-2">
+              <span className="text-gray-800">Unique Products:</span>
+              <span className="font-bold text-orange-600">{cart.length}</span>
+            </div>
+            <div className="text-sm flex justify-between items-center mb-2">
+              <span className="text-gray-800">Total Items:</span>
               <span className="font-bold text-orange-600">
                 {cart.reduce((total, item) => total + item.quantity, 0)}
               </span>
             </div>
-            <div className="text-base flex justify-between items-center">
+            <div className="mt-4 text-base flex justify-between items-center">
               <span className="font-semibold text-gray-800">Subtotal:</span>
               <span className="font-bold text-orange-600">
                 KSh {getTotalPrice().toLocaleString()}

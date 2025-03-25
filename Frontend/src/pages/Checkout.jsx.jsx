@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import About from "../components/About";
 
-// set the base url for different environments
+// Set base url for different environments
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 const PROD_URL_BASE = import.meta.env.VITE_PROD_URL_BASE;
 const BASE_URL =
@@ -25,7 +25,7 @@ const Checkout = () => {
     cardExpiry: "",
     cardCVC: "",
     mpesaNumber: "",
-    order: [], // I want to send to the backend all products in cart as an array of product.id: product._id and quantity
+    order: [], 
   });
 
   // Cities in Kenya with their shipping fees
@@ -51,7 +51,7 @@ const Checkout = () => {
   const getSubtotal = () =>
     cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
-  // Calculate shipping based on city or 0.005% of goods value (whichever is higher)
+  // Calculate shipping based on city or 5% of goods value (whichever is higher)
   useEffect(() => {
     if (formData.city) {
       const selectedCity = kenyanCities.find(
@@ -88,9 +88,6 @@ const Checkout = () => {
       ...formData,
       order: orderItems,
     };
-
-    // Payment processing logic goes here
-    console.log("Processing payment:", paymentMethod, orderDetails);
 
     const response = await fetch(`${BASE_URL}/api/orders`, {
       method: "POST",
@@ -341,16 +338,16 @@ const Checkout = () => {
               {/* Items Summary */}
               <div className="mb-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Items In Cart: {cart.length}</span>
-                  <span>KSh {getSubtotal()}</span>
+                  <span>Items In Cart Total:</span>
+                  <span>KSh {getSubtotal().toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Shipping Fee:</span>
-                  <span>Ksh. {shippingFee}</span>
+                  <span>{formData.city ? `Ksh. ${shippingFee.toLocaleString()}` : "Select city to calculate"}</span>
                 </div>
                 <div className="border-t pt-2 mt-2 flex justify-between font-semibold">
                   <span>Total:</span>
-                  <span className="text-orange-600">KSh {getTotalPrice()}</span>
+                  <span className="text-orange-600">KSh {getTotalPrice().toLocaleString()}</span>
                 </div>
               </div>
 
