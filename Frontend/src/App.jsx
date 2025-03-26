@@ -15,6 +15,7 @@ import ConfirmEmail from "./pages/ConfirmEmail";
 import SearchOrCategory from "./components/SearchOrCategory";
 import { toast } from "react-toastify";
 import Checkout from "./pages/Checkout.jsx";
+import Scroller from "./components/Scroller.jsx";
 
 // Contexts
 export const SignedInStatusContext = createContext();
@@ -125,7 +126,8 @@ const App = () => {
   return (
     <Router>
       <Header />
-      
+      <Scroller />
+
       <SignedInStatusContext.Provider
         value={{ signedInStatus, handleSignedInStatus, handleSignOut }}
       >
