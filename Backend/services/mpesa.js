@@ -59,27 +59,14 @@ const initiateSTKPush = async (phoneNumber, amount) => {
       TransactionDesc: "Shop at Xirion Africa",
     };
 
-    // console.log("Initiating STK Push:", JSON.stringify(payload, null, 2));
-
     const response = await axios.post(
       "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       payload,
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
-    // console.log(response);
-    // Return only the necessary data
-    return {
-      CheckoutRequestID: response.data.CheckoutRequestID,
-      ResponseCode: response.data.ResponseCode,
-      ResponseDescription: response.data.ResponseDescription,
-      CustomerMessage: response.data.CustomerMessage,
-    };
+    return response;
   } catch (error) {
-    console.error(
-      "Error initiating STK Push:",
-      error.response?.data || error.message
-    );
-    throw new Error(`Failed to initiate M-Pesa payment: ${error.message}`);
+    return error;
   }
 };
 
@@ -98,6 +85,7 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
     const receipt = CallbackMetadata?.Item?.find(
       (item) => item.Name === "MpesaReceiptNumber"
     )?.Value;
+
     // add receipt to orderDetails
     orderDetails.mpesaConfirmationCode = receipt;
     const phone = CallbackMetadata?.Item?.find(
@@ -107,7 +95,7 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
       `✅ Payment Successful - Amount: ${amount}, Receipt: ${receipt}, Phone: ${phone}`
     );
 
-    // Save to db here
+    // Save to db
     newOrder = new Order(orderDetails);
     const savedOrder = await newOrder.save(newOrder);
     console.log(savedOrder);
@@ -121,7 +109,4 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
   }
 };
 
-module.exports = {
-  initiateSTKPush,
-  handleSTKCallback,
-};
+module.exports = { initiateSTKPush, handleSTKCallback };

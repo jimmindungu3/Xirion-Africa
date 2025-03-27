@@ -34,7 +34,9 @@ mongoose
   .then(() => {
     // Start server on successful connection
     app.listen(PORT, () => {
+      console.log("=========================================================");
       console.log(`Server running on http://localhost:${PORT}`);
+      console.log("=========================================================");
     });
   })
   .catch((error) => {

@@ -137,18 +137,14 @@ router.post("/", async (req, res) => {
         }
 
         // Initiate STK push with the actual order amount
-        const paymentResponse = await initiateSTKPush(
-          formattedNumber,
-          totalAmount
-        );
+        const response = await initiateSTKPush(formattedNumber, totalAmount);
 
-        // Return success response with order details and payment information
-        return res.status(200).json({
-          success: true,
-          message: "M-Pesa payment initiated",
-          orderDetails,
-          paymentInfo: paymentResponse,
-        });
+        if (response.status === 200 && response.data.ResponseCode === "0") {
+          res.status(200).json(response.data);
+        } else if (response.status === 400) {
+          return res.status(400).json(response.response.data);
+        }
+
       } catch (error) {
         console.error("M-Pesa payment failed:", error);
         return res.status(500).json({

@@ -4,8 +4,10 @@ import { CartContext } from "../App";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import About from "../components/About";
+import SuccessModal from "../components/SuccessModal";
+import ErrorModal from "../components/ErrorModal";
 
-// Set base url for different environments
+// Set dynamic base URL
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 const PROD_URL_BASE = import.meta.env.VITE_PROD_URL_BASE;
 const BASE_URL =
@@ -15,6 +17,8 @@ const Checkout = () => {
   const { cart } = useContext(CartContext);
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [shippingFee, setShippingFee] = useState(0);
+  const [showSTKSentModal, setShowSTKsentModal] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,7 +40,7 @@ const Checkout = () => {
     { name: "Nakuru", fee: 250 },
     { name: "Eldoret", fee: 300 },
     { name: "Thika", fee: 220 },
-    { name: "Malindi", fee: 5500 },
+    { name: "Malindi", fee: 550 },
     { name: "Kitale", fee: 450 },
     { name: "Garissa", fee: 500 },
     { name: "Kakamega", fee: 520 },
@@ -89,18 +93,25 @@ const Checkout = () => {
       order: orderItems,
     };
 
-    const response = await fetch(`${BASE_URL}/api/orders`, {
+    const res = await fetch(`${BASE_URL}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(orderDetails),
       credentials: "include",
     });
 
-    const data = await response.json();
-
-    console.log(data);
-
-    // Redirect to success page or show confirmation
+    if (res.status === 200) {
+      const response = await res.json();
+      if (response.ResponseCode === "0") {
+        setShowSTKsentModal(true);
+      }
+    } else if (res.status === 400) {
+      const response = await res.json();
+      if (response.errorMessage === "Bad Request - Invalid PhoneNumber") {
+        setShowError(true);
+        console.log(response);
+      }
+    }
   };
 
   if (cart.length === 0) {
@@ -124,6 +135,10 @@ const Checkout = () => {
 
   return (
     <>
+      {showSTKSentModal && (
+        <SuccessModal setShowSTKsentModal={setShowSTKsentModal} />
+      )}
+      {showError && <ErrorModal setShowError={setShowError} />}
       <div className="max-w-7xl mx-auto p-4 my-8 border shadow-sm rounded-lg">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
           Checkout
