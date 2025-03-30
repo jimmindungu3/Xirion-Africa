@@ -73,7 +73,10 @@ const initiateSTKPush = async (phoneNumber, amount) => {
 const handleSTKCallback = async (callBackObject, orderDetails) => {
   const stkCallback = callBackObject.Body.stkCallback;
 
-  const { ResultCode, ResultDesc, CallbackMetadata } = stkCallback;
+  console.log(stkCallback);
+
+  const { ResultCode, ResultDesc, CallbackMetadata, CheckoutRequestID } =
+    stkCallback;
   console.log(
     `🔔 STK Callback received - ResultCode: ${ResultCode}, Desc: ${ResultDesc}`
   );
@@ -85,6 +88,9 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
     const receipt = CallbackMetadata?.Item?.find(
       (item) => item.Name === "MpesaReceiptNumber"
     )?.Value;
+
+    // add MerchantRequestID to order details
+    orderDetails.CheckoutRequestID = CheckoutRequestID;
 
     // add receipt to orderDetails
     orderDetails.mpesaConfirmationCode = receipt;

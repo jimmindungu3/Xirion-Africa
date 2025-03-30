@@ -1,11 +1,11 @@
 import React from "react";
 
-const ErrorModal = ({ setShowError }) => {
+const ErrorModal = ({ setShowSTKError }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-80 text-center">
         <svg
-          className="w-16 h-16 text-gray-500 mx-auto"
+          className="w-16 h-16 text-red-500 mx-auto"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -22,8 +22,8 @@ const ErrorModal = ({ setShowError }) => {
         <h2 className="text-lg font-semibold mt-4">Oops!</h2>
         <p className="text-gray-600 mt-2">Please enter a valid Mpesa number</p>
         <button
-          className="mt-4 bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-700 transition"
-          onClick={() => setShowError(false)}
+          className="mt-4 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
+          onClick={() => setShowSTKError(false)}
         >
           OK
         </button>

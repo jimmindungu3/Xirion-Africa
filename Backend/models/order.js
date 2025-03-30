@@ -27,6 +27,7 @@ const orderSchema = new mongoose.Schema({
     default: "placed",
   },
   mpesaConfirmationCode: { type: String, required: true },
+  CheckoutRequestID: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 

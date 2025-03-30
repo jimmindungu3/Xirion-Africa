@@ -18,7 +18,7 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [shippingFee, setShippingFee] = useState(0);
   const [showSTKSentModal, setShowSTKsentModal] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [showSTKError, setShowSTKError] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -108,7 +108,7 @@ const Checkout = () => {
     } else if (res.status === 400) {
       const response = await res.json();
       if (response.errorMessage === "Bad Request - Invalid PhoneNumber") {
-        setShowError(true);
+        setShowSTKError(true);
         console.log(response);
       }
     }
@@ -138,7 +138,7 @@ const Checkout = () => {
       {showSTKSentModal && (
         <SuccessModal setShowSTKsentModal={setShowSTKsentModal} />
       )}
-      {showError && <ErrorModal setShowError={setShowError} />}
+      {showSTKError && <ErrorModal setShowSTKError={setShowSTKError} />}
       <div className="max-w-7xl mx-auto p-4 my-8 border shadow-sm rounded-lg">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
           Checkout
@@ -358,7 +358,7 @@ const Checkout = () => {
               {/* Items Summary */}
               <div className="mb-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Items In Cart Total:</span>
+                  <span>Cart Total:</span>
                   <span>KSh {getSubtotal().toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
