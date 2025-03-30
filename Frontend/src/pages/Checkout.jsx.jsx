@@ -109,7 +109,6 @@ const Checkout = () => {
       const response = await res.json();
       if (response.errorMessage === "Bad Request - Invalid PhoneNumber") {
         setShowSTKError(true);
-        console.log(response);
       }
     }
   };
