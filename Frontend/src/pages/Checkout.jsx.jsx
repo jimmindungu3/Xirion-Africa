@@ -104,6 +104,30 @@ const Checkout = () => {
       const response = await res.json();
       if (response.ResponseCode === "0") {
         setShowSTKsentModal(true);
+
+
+
+
+        const CheckoutRequestID = response.CheckoutRequestID;
+
+        const intervalId = setInterval(() => {
+          fetch(`${BASE_URL}/api/orders/${CheckoutRequestID}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.CheckoutRequestID === CheckoutRequestID) {
+                clearInterval(intervalId); // Stop polling once order is confirmed
+                alert("Order placed successfully");
+              }
+            })
+            .catch(error => console.error("Error fetching order status:", error));
+        }, 5000);
+        
+
+
+
+
+
+
       }
     } else if (res.status === 400) {
       const response = await res.json();

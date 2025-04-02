@@ -1,5 +1,6 @@
 const express = require("express");
 const Product = require("../models/product");
+const Order = require("../models/order");
 const router = express.Router();
 
 const { initiateSTKPush, handleSTKCallback } = require("../services/mpesa");
@@ -144,7 +145,6 @@ router.post("/", async (req, res) => {
         } else if (response.status === 400) {
           return res.status(400).json(response.response.data);
         }
-
       } catch (error) {
         console.error("M-Pesa payment failed:", error);
         return res.status(500).json({
@@ -168,6 +168,22 @@ router.post("/mpesa/callback", async (req, res) => {
   return res
     .status(200)
     .json({ ResultCode: 0, ResultDesc: "Callback received" });
+});
+
+// GET order by checkout id
+router.get("/:CheckoutRequestID", async (req, res) => {
+  try {
+    const { CheckoutRequestID } = req.params;
+    const order = await Order.findOne({ CheckoutRequestID });
+
+    if (order) {
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 module.exports = router;
