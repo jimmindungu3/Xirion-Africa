@@ -160,14 +160,9 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/mpesa/callback", async (req, res) => {
-  console.log("🚀 ================== Callback Hit! ================== ");
-  console.log(req.body);
+  handleSTKCallback(req.body, orderDetails);
 
-  ResultCode = handleSTKCallback(req.body, orderDetails);
-
-  return res
-    .status(200)
-    .json({ ResultCode: 0, ResultDesc: "Callback received" });
+  return res.status(200);
 });
 
 // GET order by checkout id

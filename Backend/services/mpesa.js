@@ -73,15 +73,10 @@ const initiateSTKPush = async (phoneNumber, amount) => {
 const handleSTKCallback = async (callBackObject, orderDetails) => {
   const stkCallback = callBackObject.Body.stkCallback;
 
-  console.log(stkCallback);
-
   const { ResultCode, ResultDesc, CallbackMetadata, CheckoutRequestID } =
     stkCallback;
-  console.log(
-    `🔔 STK Callback received - ResultCode: ${ResultCode}, Desc: ${ResultDesc}`
-  );
 
-  if (ResultCode === 0) {
+  if (ResultCode === 0) { // 0 result code means successful payment
     const amount = CallbackMetadata?.Item?.find(
       (item) => item.Name === "Amount"
     )?.Value;
@@ -94,24 +89,17 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
 
     // add receipt to orderDetails
     orderDetails.mpesaConfirmationCode = receipt;
-    const phone = CallbackMetadata?.Item?.find(
-      (item) => item.Name === "PhoneNumber"
-    )?.Value;
-    console.log(
-      `✅ Payment Successful - Amount: ${amount}, Receipt: ${receipt}, Phone: ${phone}`
-    );
 
     // Save to db
     newOrder = new Order(orderDetails);
-    const savedOrder = await newOrder.save(newOrder);
-    console.log(savedOrder)
-    return ResultCode;
+    newOrder.save(newOrder);
+    return;
   } else if (ResultCode === 1032) {
     console.log("❌ Request Cancelled by User");
-    return ResultCode;
+    return;
   } else {
     console.log(`⚠️ Payment Failed - Code: ${ResultCode}, Desc: ${ResultDesc}`);
-    return ResultCode;
+    return;
   }
 };
 
