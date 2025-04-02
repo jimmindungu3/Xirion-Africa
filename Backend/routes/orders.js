@@ -94,7 +94,6 @@ router.post("/", async (req, res) => {
       // Add to order items array
       orderItems.push({
         productId,
-        productName: product.name,
         price: product.price,
         quantity,
         itemTotal,

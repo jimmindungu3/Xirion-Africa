@@ -76,7 +76,8 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
   const { ResultCode, ResultDesc, CallbackMetadata, CheckoutRequestID } =
     stkCallback;
 
-  if (ResultCode === 0) { // 0 result code means successful payment
+  if (ResultCode === 0) {
+    // 0 result code means successful payment
     const amount = CallbackMetadata?.Item?.find(
       (item) => item.Name === "Amount"
     )?.Value;
@@ -84,14 +85,14 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
       (item) => item.Name === "MpesaReceiptNumber"
     )?.Value;
 
-    // add MerchantRequestID to order details
+    // add CheckoutRequestID to order details
     orderDetails.CheckoutRequestID = CheckoutRequestID;
 
     // add receipt to orderDetails
     orderDetails.mpesaConfirmationCode = receipt;
 
     // Save to db
-    newOrder = new Order(orderDetails);
+    const newOrder = new Order(orderDetails);
     newOrder.save(newOrder);
     return;
   } else if (ResultCode === 1032) {
