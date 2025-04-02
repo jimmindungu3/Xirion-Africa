@@ -93,7 +93,7 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
 
     // Save to db
     const newOrder = new Order(orderDetails);
-    newOrder.save(newOrder);
+    const placedOrder = await newOrder.save(newOrder);
     return;
   } else if (ResultCode === 1032) {
     console.log("❌ Request Cancelled by User");
