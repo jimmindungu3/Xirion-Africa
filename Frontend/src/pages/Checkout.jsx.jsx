@@ -96,8 +96,8 @@ const Checkout = () => {
     const res = await fetch(`${BASE_URL}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderDetails),
       credentials: "include",
+      body: JSON.stringify(orderDetails),
     });
 
     if (res.status === 200) {
@@ -105,29 +105,24 @@ const Checkout = () => {
       if (response.ResponseCode === "0") {
         setShowSTKsentModal(true);
 
-
-
-
         const CheckoutRequestID = response.CheckoutRequestID;
+        console.log(CheckoutRequestID);
+
+        console.log(`${BASE_URL}/api/orders/${CheckoutRequestID}`)
 
         const intervalId = setInterval(() => {
           fetch(`${BASE_URL}/api/orders/${CheckoutRequestID}`)
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
               if (data.CheckoutRequestID === CheckoutRequestID) {
                 clearInterval(intervalId); // Stop polling once order is confirmed
                 alert("Order placed successfully");
               }
             })
-            .catch(error => console.error("Error fetching order status:", error));
+            .catch((error) =>
+              console.error("Error fetching order status:", error)
+            );
         }, 5000);
-        
-
-
-
-
-
-
       }
     } else if (res.status === 400) {
       const response = await res.json();

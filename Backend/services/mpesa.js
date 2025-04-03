@@ -76,6 +76,10 @@ const handleSTKCallback = async (callBackObject, orderDetails) => {
   const { ResultCode, ResultDesc, CallbackMetadata, CheckoutRequestID } =
     stkCallback;
 
+  console.log("============= Callback Hit =============");
+  console.log({ CheckoutRequestID });
+  console.log("============= Callback Hit =============");
+
   if (ResultCode === 0) {
     // 0 result code means successful payment
     const amount = CallbackMetadata?.Item?.find(

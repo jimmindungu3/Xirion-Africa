@@ -122,7 +122,6 @@ router.post("/", async (req, res) => {
         shippingFee,
         totalAmount,
       },
-      // status: "placed",
       createdAt: new Date(),
     };
 
@@ -161,7 +160,7 @@ router.post("/", async (req, res) => {
 router.post("/mpesa/callback", async (req, res) => {
   handleSTKCallback(req.body, orderDetails);
 
-  return res.status(200);
+  return res.status(200).json({ message: "Callback Received" });
 });
 
 // GET order by checkout id
