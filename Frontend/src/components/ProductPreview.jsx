@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import WishList from "./WishList";
 import About from "./About";
@@ -12,6 +12,19 @@ const ProductPreview = () => {
 
   const { addToCart } = useContext(CartContext);
   const { addToWishlist } = useContext(WishlistContext);
+
+  // Set initial state
+  const [selectedImage, setSelectedImage] = useState(
+    product?.images?.[0] || product?.image
+  );
+  const [quantity, setQuantity] = useState(1);
+
+  // useEffect to update selectedImage when product changes
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(product.images?.[0] || product.image);
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -32,11 +45,6 @@ const ProductPreview = () => {
       </div>
     );
   }
-
-  const [selectedImage, setSelectedImage] = useState(
-    product?.images?.[0] || product?.image
-  );
-  const [quantity, setQuantity] = useState(1);
 
   return (
     <>

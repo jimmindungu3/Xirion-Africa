@@ -121,7 +121,10 @@ const TopSellers = () => {
               ))
             : bestSellers.map((product) => (
                 <SwiperSlide key={product._id} className="h-auto">
-                  <div className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition">
+                  <div
+                    className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition hover:cursor-pointer"
+                    onClick={() => handleProductPreview(product)}
+                  >
                     {/* Product Image - Fixed height */}
                     <div className="mb-2 h-28 md:h-40 w-full max-w-[160px] sm:max-w-[200px] mx-auto">
                       <div className="w-full h-full rounded-lg flex items-center justify-center overflow-hidden text-xs bg-gray-100">
@@ -136,7 +139,6 @@ const TopSellers = () => {
                         )}
                       </div>
                     </div>
-
                     {/* Product Details */}
                     <div className="px-2 flex flex-col flex-grow">
                       {/* Title - Fixed height */}
@@ -170,16 +172,18 @@ const TopSellers = () => {
                         <div className="flex flex-col gap-y-2">
                           <button
                             className="bg-brandOrange border border-brandOrange w-full text-white text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => addToCart(product, 1)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart(product, 1);
+                            }}
                           >
                             Add To Cart
                           </button>
-                          <button
+                          {/* <button
                             className="border border-brandOrange w-full text-brandOrange text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => handleProductPreview(product)}
                           >
                             More Details
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
