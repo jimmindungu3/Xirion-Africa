@@ -1,0 +1,56 @@
+@import 'react-toastify/dist/ReactToastify.css';
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.Toastify__toast--success {
+  background-color: white !important;
+  color: #333 !important;
+  border-left: 4px solid #f7721b !important;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background-color: #f7721b !important;
+}
+
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: #f7721b !important;
+}
+
+/* Error toast - red */
+.Toastify__toast--error {
+  background-color: white !important;
+  color: #333 !important;
+  border-left: 4px solid rgb(239, 68, 68) !important;
+}
+
+.Toastify__toast--error .Toastify__progress-bar {
+  background-color: rgb(239, 68, 68) !important;
+}
+
+.Toastify__toast--error .Toastify__toast-icon svg {
+  fill: rgb(239, 68, 68) !important;
+}
+
+/* Info toast - gray */
+.Toastify__toast--info {
+  background-color: white !important;
+  color: #333 !important;
+  border-left: 4px solid rgb(107, 114, 128) !important;
+}
+
+.Toastify__toast--info .Toastify__progress-bar {
+  background-color: rgb(107, 114, 128) !important;
+}
+
+.Toastify__toast--info .Toastify__toast-icon svg {
+  fill: rgb(107, 114, 128) !important;
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+}
