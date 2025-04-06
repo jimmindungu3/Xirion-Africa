@@ -22,6 +22,12 @@ const RandomProducts = () => {
     Navigate("/product-preview", { state: { product: selectedProduct } });
   };
 
+  // add to cart with stop propagation
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart(product, 1);
+  };
+
   useEffect(() => {
     const fetchRandomProducts = async () => {
       try {
@@ -75,7 +81,8 @@ const RandomProducts = () => {
             : randomProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition"
+                  className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition cursor-pointer"
+                  onClick={() => handleProductPreview(product)}
                 >
                   <div className="mb-2 h-28 md:h-40 w-full max-w-[160px] sm:max-w-[200px] mx-auto">
                     <div className="w-full h-full rounded-lg flex items-center justify-center overflow-hidden text-xs bg-gray-100">
@@ -116,16 +123,15 @@ const RandomProducts = () => {
                       <div className="flex flex-col gap-y-2">
                         <button
                           className="bg-brandOrange border border-brandOrange w-full text-white text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => addToCart(product, 1)}
+                          onClick={(e) => handleAddToCart(e, product)}
                         >
                           Add To Cart
                         </button>
-                        <button
+                        {/* <button
                           className="border border-brandOrange w-full text-brandOrange text-xs font-semibold px-3 py-1 rounded-md md:opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => handleProductPreview(product)}
                         >
                           More Details
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

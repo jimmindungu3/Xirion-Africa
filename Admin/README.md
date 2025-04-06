@@ -1,9 +1,22 @@
-<<<<<<< HEAD
-=======
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignIn from "./components/SignIn";
+import ProductUploader from "./components/ProductUploader";
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/upload-product" element={<ProductUploader />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
 
 
-
->>>>>>> Production
 import React from "react";
 import Nav from "./Nav";
 
@@ -237,8 +250,133 @@ const ProductUploader = () => {
   );
 };
 
-<<<<<<< HEAD
 export default ProductUploader;
-=======
-export default ProductUploader;
->>>>>>> Production
+
+
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+const SignIn = () => {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    // Modified this section to properly center the content vertically and horizontally
+    <section className="dark:bg-gray-900 min-h-screen flex items-center justify-center px-4">
+      <div className="w-full bg-white rounded-lg shadow-md sm:max-w-md dark:bg-gray-800 dark:border dark:border-gray-700 p-6">
+        <h1 className="text-xl font-bold text-gray-900 md:text-2xl">
+          Sign In As Admin
+        </h1>
+
+        <form className="mt-4 space-y-4">
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Your email
+            </label>
+            <input
+              type="email"
+              name="email"
+              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+              placeholder="name@company.com"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="flex items-center text-sm text-gray-500 dark:text-gray-300">
+              <input type="checkbox" className="mr-2" />
+              Remember me
+            </label>
+            <Link
+              to="/recover-password"
+              className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full text-white bg-brandOrange hover:bg-brandOrangeDark focus:ring-4 focus:outline-none focus:ring-primary-300 font-semibold rounded-lg text-sm px-5 py-2.5"
+            onClick={() => navigate("/upload-product")}
+          >
+            Sign in
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+export default SignIn;
+
+
+
+import React from "react";
+import { GiCircuitry } from "react-icons/gi";
+
+const Nav = () => {
+  return (
+    <nav className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <div className="text-lg md:text-2xl lg:text-3xl flex items-center space-x-2 text-brandOrange">
+            <GiCircuitry />
+            <span>
+              <span className="font-bold">XIR</span>ION
+            </span>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="flex items-center space-x-4 rounded-md font-semibold">
+            <span className="px-3 py-2  text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+              Upload Product
+            </span>
+            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+              Orders
+            </span>
+            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+              Stock
+            </span>
+            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+              Sales
+            </span>
+
+            {/* Logout Button */}
+            <button className="ml-4 px-4 py-2 rounded-md text-sm bg-brandOrange text-white hover:bg-brandOrangeDark transition">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Nav;
+
