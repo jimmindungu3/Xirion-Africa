@@ -40,8 +40,4 @@ const Nav = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Nav;
-=======
-export default Nav;
->>>>>>> Production

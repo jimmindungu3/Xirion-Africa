@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-
->>>>>>> Production
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -82,8 +77,4 @@ const SignIn = () => {
   );
 };
 
-<<<<<<< HEAD
 export default SignIn;
-=======
-export default SignIn;
->>>>>>> Production
