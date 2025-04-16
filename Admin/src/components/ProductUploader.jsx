@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+// upload product component
+
+import React, { useState, useRef } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import Nav from "./Nav";
+
+// Set dynamic base URL
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
+const PROD_URL_BASE = import.meta.env.VITE_PROD_URL_BASE;
+const BASE_URL =
+  ENVIRONMENT === "DEVELOPMENT" ? "http://localhost:5000" : PROD_URL_BASE;
 
 const categories = [
   {
@@ -9,7 +17,7 @@ const categories = [
   },
   {
     title: "Phones",
-    items: "Smartphones, Feature Phones, Chargers, Phone Cases,",
+    items: "Smartphones, Feature Phones, Chargers, Phone Cases",
   },
   {
     title: "Gaming",
@@ -51,8 +59,12 @@ const ProductUploader = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [quantityInStock, setQuantityInStock] = useState("");
-  const [images, setImages] = useState(null);
   const [chosenCategories, setChosenCategories] = useState([]);
+
+  // Image preview states
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const fileInputRef = useRef(null);
 
   // Custom attributes states
   const [customAttribute, setCustomAttribute] = useState("");
@@ -63,11 +75,15 @@ const ProductUploader = () => {
   const [keyword, setKeyword] = useState("");
   const [keywords, setKeywords] = useState([]);
 
-  // Add a new category to chosen categories
-  const handleCategories = (newCategory) => {
-    // Check if category is already selected
-    if (!chosenCategories.includes(newCategory)) {
-      setChosenCategories([...chosenCategories, newCategory]);
+  // Handle category toggle (check/uncheck)
+  const handleCategories = (category) => {
+    // If the category is already selected, remove it
+    if (chosenCategories.includes(category)) {
+      setChosenCategories(chosenCategories.filter((cat) => cat !== category));
+    }
+    // Otherwise, add it
+    else {
+      setChosenCategories([...chosenCategories, category]);
     }
   };
 
@@ -92,7 +108,7 @@ const ProductUploader = () => {
       setCustomAttributes([
         ...customAttributes,
         {
-          name: customAttribute.trim(),
+          attribute: customAttribute.trim(),
           value: customAttributeValue.trim(),
         },
       ]);
@@ -109,9 +125,42 @@ const ProductUploader = () => {
     );
   };
 
-  // Handle file upload for images
+  // Handle file upload for images with preview
   const handleImageUpload = (e) => {
-    setImages(e.target.files);
+    // Store files for upload
+    const files = Array.from(e.target.files);
+    setImageFiles(files);
+
+    // Create preview URLs for display
+    const newImageUrls = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prevImages) => [...prevImages, ...newImageUrls]);
+
+    // Reset file input so the same file can be selected again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Remove a specific image preview
+  const removeImage = (indexToRemove) => {
+    setImagePreviews((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+
+    // Also update the files array if needed
+    if (imageFiles) {
+      const updatedFiles = Array.from(imageFiles).filter(
+        (_, index) => index !== indexToRemove
+      );
+      setImageFiles(updatedFiles);
+    }
+  };
+
+  // Clear all images
+  const clearImages = () => {
+    setImagePreviews([]);
+    setImageFiles(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // Clear all form data
@@ -120,42 +169,43 @@ const ProductUploader = () => {
     setDescription("");
     setPrice("");
     setQuantityInStock("");
-    setImages(null);
+    clearImages();
     setChosenCategories([]);
     setCustomAttribute("");
     setCustomAttributeValue("");
     setCustomAttributes([]);
     setKeyword("");
     setKeywords([]);
-
-    // Reset file input by using a ref or DOM manipulation
-    const fileInput = document.querySelector('input[type="file"]');
-    if (fileInput) fileInput.value = "";
   };
 
   // Upload the product
   const handleUpload = () => {
-    // Create product data object
-    const productData = {
-      title,
-      description,
-      price: Number(price),
-      quantityInStock: Number(quantityInStock),
-      categories: chosenCategories,
-      customAttributes,
-      keywords,
-    };
+    // FormData to hold attributes and image files
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", Number(price));
+    formData.append("quantityInStock", Number(quantityInStock));
+    formData.append("categories", JSON.stringify(chosenCategories));
+    formData.append("customAttributes", JSON.stringify(customAttributes));
+    formData.append("keywords", JSON.stringify(keywords));
+    imageFiles.forEach((imageFile) => {
+      formData.append("images", imageFile);
+    });
 
-    // In a real app, you would:
-    // 1. Validate the data
-    // 2. Create a FormData object for the images
-    // 3. Send to backend API
+    // console.log("FormData contents:");
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
 
-    console.log("Product data to upload:", productData);
-    console.log("Images to upload:", images);
-
-    // Here you would add your API call
-    alert("Product submitted successfully!");
+    fetch(`${BASE_URL}/api/products`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -165,7 +215,7 @@ const ProductUploader = () => {
         <h2 className="text-lg font-semibold border-b border-gray-200 pb-2">
           Upload A New Product
         </h2>
-        <div className="mt-4 grid grid-cols-2 gap-x-6">
+        <div className="mt-4 flex flex-col md:grid grid-cols-2 gap-x-6">
           <div className="flex flex-col space-y-4">
             {/* Left column */}
 
@@ -194,9 +244,9 @@ const ProductUploader = () => {
                 type="text"
                 name="description"
                 value={description}
-                rows={4}
+                rows={7}
                 className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="The Samsung Galaxy S24 Ultra is the ultimate flagship smartphone, featuring a 6.8-inch Dynamic AMOLED 2X display with a 120Hz refresh rate and QHD+ resolution, protected by Corning Gorilla Glass Victus 3. Powered by the Snapdragon 8 Gen 3 (or Exynos 2400 in some regions), it delivers blazing-fast performance for gaming and multitasking..."
+                placeholder="E.g. The Samsung Galaxy S24 Ultra is the ultimate flagship smartphone, featuring a 6.8-inch Dynamic AMOLED 2X display with a 120Hz refresh rate and QHD+ resolution, protected by Corning Gorilla Glass Victus 3. Powered by the Snapdragon 8 Gen 3 (or Exynos 2400 in some regions), it delivers blazing-fast performance for gaming and multitasking..."
                 onChange={(e) => setDescription(e.target.value)}
                 required
               />
@@ -212,7 +262,7 @@ const ProductUploader = () => {
                 name="price"
                 value={price}
                 className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="E.g 120000"
+                placeholder="E.g. 120000"
                 onChange={(e) => setPrice(e.target.value)}
                 required
               />
@@ -228,7 +278,7 @@ const ProductUploader = () => {
                 name="quantity"
                 value={quantityInStock}
                 className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="E.g 50"
+                placeholder="E.g. 50"
                 onChange={(e) => setQuantityInStock(e.target.value)}
                 required
               />
@@ -237,19 +287,58 @@ const ProductUploader = () => {
 
           {/* RIGHT COLUMN */}
           <div className="flex flex-col">
-            {/* PRODUCT IMAGES */}
+            {/* PRODUCT IMAGES with PREVIEW */}
             <div>
               <label className="block mb-2 text-sm font-semibold text-gray-900">
                 Images
               </label>
-              <input
-                type="file"
-                name="image"
-                multiple
-                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                onChange={handleImageUpload}
-                required
-              />
+
+              {/* Image previews */}
+              <div className="flex gap-4 flex-wrap mb-4">
+                {imagePreviews.length === 0 ? (
+                  <p className="text-gray-500">No images selected</p>
+                ) : (
+                  imagePreviews.map((img, index) => (
+                    <div
+                      key={index}
+                      className="relative h-16 w-16 border border-gray-400"
+                    >
+                      <img
+                        src={img}
+                        alt={`Preview ${index}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        className="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full"
+                        onClick={() => removeImage(index)}
+                        type="button"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* File input and clear button */}
+              <div className="flex gap-4 items-center">
+                <input
+                  type="file"
+                  name="image"
+                  multiple
+                  className="border rounded-r-md border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  onChange={handleImageUpload}
+                  ref={fileInputRef}
+                  required
+                />
+                <button
+                  className="px-3 py-0.5 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
+                  onClick={clearImages}
+                  type="button"
+                >
+                  Clear Images
+                </button>
+              </div>
             </div>
 
             {/* PRODUCT CATEGORIES */}
@@ -260,12 +349,13 @@ const ProductUploader = () => {
                   <span className="space-x-2 text-gray-800" key={cat.title}>
                     <input
                       type="checkbox"
+                      id={`cat-${cat.title}`}
                       name="category"
                       value={cat.title}
                       checked={chosenCategories.includes(cat.title)}
-                      onChange={(e) => handleCategories(e.target.value)}
+                      onChange={() => handleCategories(cat.title)}
                     />
-                    <label htmlFor={cat.title}>{cat.title}</label>
+                    <label htmlFor={`cat-${cat.title}`}>{cat.title}</label>
                   </span>
                 ))}
               </div>
@@ -273,16 +363,15 @@ const ProductUploader = () => {
 
             {/* CUSTOM ATTRIBUTES */}
             <div>
-              <h4 className="my-4 font-semibold">Custom Attributes</h4>
+              <h4 className="mt-4 mb-2 font-semibold">Custom Attributes</h4>
 
-              {/* Display existing custom attributes with the same style as keywords */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap">
                 {customAttributes.map((attr, index) => (
                   <span
                     key={index}
-                    className="flex items-center gap-1 py-2 px-3 mb-2 rounded-md bg-green-100"
+                    className="flex items-center gap-1 py-2 px-3 mb-2 mr-2 rounded-md bg-green-100"
                   >
-                    <span className="font-medium">{attr.name}:</span>
+                    <span className="font-medium">{attr.attribute}:</span>
                     <span>{attr.value}</span>
                     <RiCloseFill
                       className="text-lg cursor-pointer ml-2"
@@ -323,6 +412,7 @@ const ProductUploader = () => {
                   <button
                     className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
                     onClick={addCustomAttribute}
+                    type="button"
                   >
                     Add
                   </button>
@@ -337,7 +427,7 @@ const ProductUploader = () => {
                 {keywords.map((kw) => (
                   <span
                     key={kw}
-                    className="flex items-center gap-1 py-2 px-3 rounded-md bg-green-100"
+                    className="flex items-center gap-1 py-2 px-3 mb-2 rounded-md bg-green-100"
                   >
                     {kw}
                     <RiCloseFill
@@ -372,12 +462,14 @@ const ProductUploader = () => {
           <button
             className="py-2 bg-gray-400 w-full rounded-md hover:bg-gray-500"
             onClick={handleClear}
+            type="button"
           >
             Clear
           </button>
           <button
             className="bg-orange-500 w-full rounded-md py-2 hover:bg-orange-600"
             onClick={handleUpload}
+            type="button"
           >
             Upload
           </button>

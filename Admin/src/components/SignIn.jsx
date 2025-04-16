@@ -12,7 +12,7 @@ const SignIn = () => {
     <section className="dark:bg-gray-900 min-h-screen flex items-center justify-center px-4">
       <div className="w-full bg-white rounded-lg shadow-md sm:max-w-md dark:bg-gray-800 dark:border dark:border-gray-700 p-6">
         <h1 className="text-xl font-bold text-gray-900 md:text-2xl">
-          Sign In As Admin
+          Admin Sign In
         </h1>
 
         <form className="mt-4 space-y-4">

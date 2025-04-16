@@ -1,15 +1,79 @@
 const express = require("express");
 const Product = require("../models/product");
+const cloudinary = require("cloudinary").v2;
+require("dotenv").config();
+const multer = require("multer");
 
 const router = express.Router();
 
+// Configure Cloudinary with environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Setup multer for handling file uploads
+const upload = multer({ storage: multer.memoryStorage() });
+
 // POST /api/products - Create a new product
-router.post("/", async (req, res) => {
+router.post("/", upload.array("images"), async (req, res) => {
   try {
-    const product = new Product(req.body);
-    const savedProduct = await product.save();
-    res.status(201).json(savedProduct);
+    // Log received data for debugging
+    // console.log("Form Data Fields:", req.body);
+    // console.log("Uploaded Images:", req.files);
+
+    // Parse JSON strings back to objects
+    const categories = JSON.parse(req.body.categories || "[]");
+    const keywords = JSON.parse(req.body.keywords || "[]");
+    const customAttributes = JSON.parse(req.body.customAttributes || "[]");
+
+    // Upload images to Cloudinary and collect their URLs
+    const imageUrls = [];
+
+    // Check if there are files to upload
+    if (req.files && req.files.length > 0) {
+      // Process each image file
+      for (const file of req.files) {
+        // Convert buffer to base64 string for Cloudinary
+        const base64Data = `data:${file.mimetype};base64,${file.buffer.toString(
+          "base64"
+        )}`;
+
+        // Upload to Cloudinary
+        const result = await cloudinary.uploader.upload(base64Data, {
+          upload_preset: "xirion-africa", // Use the specific preset
+        });
+
+        // Store the secure URL
+        imageUrls.push(result.secure_url);
+      }
+    }
+
+    // Create a new product using our mongoose model
+    const productData = {
+      title: req.body.title,
+      price: Number(req.body.price),
+      description: req.body.description,
+      category: categories,
+      keywords: keywords,
+      quantity: Number(req.body.quantityInStock),
+      images: imageUrls,
+      customAttributes
+    };
+
+    const newProduct = new Product(productData);
+
+    // Save the new product to MongoDB
+    const savedProduct = await newProduct.save();
+
+    // Send success response
+    res.status(201).json({
+      message: "Product created successfully",
+      product: savedProduct,
+    });
   } catch (error) {
+    console.error("Error creating product:", error.message);
     res.status(400).json({ error: error.message });
   }
 });
