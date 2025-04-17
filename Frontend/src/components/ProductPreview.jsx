@@ -96,6 +96,25 @@ const ProductPreview = () => {
                   {product.description}
                 </p>
 
+                {/* Custom Attributes Table - Updated Section */}
+                {product.customAttributes && product.customAttributes.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="text-sm md:text-base font-medium text-gray-900 mb-2">Specifications:</h3>
+                    <div className="overflow-hidden rounded-lg border border-gray-200">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <tbody className="divide-y divide-gray-200">
+                          {product.customAttributes.map((attr, index) => (
+                            <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                              <td className="px-3 py-2 text-sm text-gray-600 font-semibold">{attr.attribute}</td>
+                              <td className="px-3 py-2 text-sm text-gray-900">{attr.value}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
                 {/* Quantity Selector */}
                 <div className="mt-6 flex items-center">
                   <span className="mr-3 text-sm font-medium text-gray-900">
