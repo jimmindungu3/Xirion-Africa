@@ -42,7 +42,9 @@ router.post("/", upload.array("images"), async (req, res) => {
 
         // Upload to Cloudinary
         const result = await cloudinary.uploader.upload(base64Data, {
-          upload_preset: "xirion-africa", // Use the specific preset
+          upload_preset: "xirion-africa",
+          use_filename: true,
+          unique_filename: true,
         });
 
         // Store the secure URL
@@ -59,7 +61,7 @@ router.post("/", upload.array("images"), async (req, res) => {
       keywords: keywords,
       quantity: Number(req.body.quantityInStock),
       images: imageUrls,
-      customAttributes
+      customAttributes,
     };
 
     const newProduct = new Product(productData);
