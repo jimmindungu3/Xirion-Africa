@@ -49,8 +49,8 @@ const ProductPreview = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex-grow max-w-7xl mx-auto px-4 pt-8 pb-2">
-          <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="flex-grow max-w-7xl mx-auto px-2 pt-8 pb-2">
+          <div className="bg-white rounded-lg shadow-sm border p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Product Images */}
               <div className="flex gap-1 md:gap-2">
