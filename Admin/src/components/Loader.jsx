@@ -1,16 +1,16 @@
 import React from "react";
 
-const LoadingSpinner = ({ text }) => {
+const Loader = ({ text }) => {
   return (
     <div className="flex items-center gap-2">
       <svg
-        className="w-4 h-4 animate-spin text-brandOrange"
+        className="w-4 h-4 animate-spin text-white"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
       >
         <circle
-          className="opacity-55"
+          className="opacity-80"
           cx="12"
           cy="12"
           r="10"
@@ -24,4 +24,4 @@ const LoadingSpinner = ({ text }) => {
   );
 };
 
-export default LoadingSpinner;
+export default Loader;
