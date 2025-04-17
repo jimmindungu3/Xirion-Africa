@@ -2,7 +2,9 @@
 
 import React, { useState, useRef } from "react";
 import { RiCloseFill } from "react-icons/ri";
+import Loader from "../components/Loader";
 import Nav from "./Nav";
+import { toast } from "react-toastify";
 
 // Set dynamic base URL
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
@@ -74,6 +76,9 @@ const ProductUploader = () => {
   // Keywords states
   const [keyword, setKeyword] = useState("");
   const [keywords, setKeywords] = useState([]);
+
+  // Loading state
+  const [uploading, setUploading] = useState(false);
 
   // Handle category toggle (check/uncheck)
   const handleCategories = (category) => {
@@ -159,7 +164,7 @@ const ProductUploader = () => {
   // Clear all images
   const clearImages = () => {
     setImagePreviews([]);
-    setImageFiles(null);
+    setImageFiles([]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -180,6 +185,8 @@ const ProductUploader = () => {
 
   // Upload the product
   const handleUpload = () => {
+    setUploading(true);
+
     // FormData to hold attributes and image files
     const formData = new FormData();
     formData.append("title", title);
@@ -193,19 +200,22 @@ const ProductUploader = () => {
       formData.append("images", imageFile);
     });
 
-    // console.log("FormData contents:");
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`);
-    // }
-
     fetch(`${BASE_URL}/api/products`, {
       method: "POST",
       credentials: "include",
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.error(err));
+      .then((data) => {
+        console.log(data);
+        setUploading(false);
+        toast.success(`${title} uploaded successfully`);
+        // handleClear()
+      })
+      .catch((err) => {
+        console.error(err);
+        setUploading(false);
+      });
   };
 
   return (
@@ -313,7 +323,7 @@ const ProductUploader = () => {
                         onClick={() => removeImage(index)}
                         type="button"
                       >
-                        ×
+                        <RiCloseFill />
                       </button>
                     </div>
                   ))
@@ -331,13 +341,15 @@ const ProductUploader = () => {
                   ref={fileInputRef}
                   required
                 />
-                <button
-                  className="px-3 py-0.5 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
-                  onClick={clearImages}
-                  type="button"
-                >
-                  Clear Images
-                </button>
+                {imageFiles.length > 0 && (
+                  <button
+                    className="px-3 py-0.5 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
+                    onClick={clearImages}
+                    type="button"
+                  >
+                    Clear Images
+                  </button>
+                )}
               </div>
             </div>
 
@@ -374,15 +386,15 @@ const ProductUploader = () => {
                     <span className="font-medium">{attr.attribute}:</span>
                     <span>{attr.value}</span>
                     <RiCloseFill
-                      className="text-lg cursor-pointer ml-2"
+                      className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
                       onClick={() => removeCustomAttribute(index)}
                     />
                   </span>
                 ))}
               </div>
 
-              <div className="grid grid-cols-12 gap-4 items-end">
-                <div className="col-span-5">
+              <div className="grid grid-cols-12 gap-2 items-end">
+                <div className="col-span-4">
                   <label className="block mb-2 text-sm font-medium text-gray-900">
                     Attribute
                   </label>
@@ -395,7 +407,7 @@ const ProductUploader = () => {
                     onChange={(e) => setCustomAttribute(e.target.value)}
                   />
                 </div>
-                <div className="col-span-5">
+                <div className="col-span-6">
                   <label className="block mb-2 text-sm font-medium text-gray-900">
                     Value
                   </label>
@@ -410,7 +422,7 @@ const ProductUploader = () => {
                 </div>
                 <div className="col-span-2">
                   <button
-                    className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                    className="w-ful px-4 py-2 bg-gray-200 border border-gray-500 rounded-md hover:bg-gray-300"
                     onClick={addCustomAttribute}
                     type="button"
                   >
@@ -431,7 +443,7 @@ const ProductUploader = () => {
                   >
                     {kw}
                     <RiCloseFill
-                      className="text-lg cursor-pointer"
+                      className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
                       onClick={() => removeKeyword(kw)}
                     />
                   </span>
@@ -449,7 +461,7 @@ const ProductUploader = () => {
                 />
                 <button
                   type="button"
-                  className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                  className="px-4 py-2 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
                   onClick={addKeyWord}
                 >
                   Add
@@ -458,6 +470,8 @@ const ProductUploader = () => {
             </div>
           </div>
         </div>
+
+        {/* ACTION BUTTONS */}
         <div className="mt-8 flex gap-8 text-white font-semibold">
           <button
             className="py-2 bg-gray-400 w-full rounded-md hover:bg-gray-500"
@@ -467,11 +481,11 @@ const ProductUploader = () => {
             Clear
           </button>
           <button
-            className="bg-orange-500 w-full rounded-md py-2 hover:bg-orange-600"
+            className="bg-orange-500 w-full rounded-md py-2 hover:bg-orange-600 flex items-center justify-center"
             onClick={handleUpload}
             type="button"
           >
-            Upload
+            {uploading ? <Loader text={"Uploading"} /> : "Upload"}
           </button>
         </div>
       </div>
