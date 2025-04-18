@@ -1,5 +1,6 @@
 import React from "react";
 import { GiCircuitry } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
@@ -7,21 +8,28 @@ const Nav = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <div className="text-lg md:text-2xl lg:text-3xl flex items-center space-x-2 text-brandOrange">
-            <GiCircuitry />
-            <span>
-              <span className="font-bold">XIR</span>ION
-            </span>
-          </div>
+          <Link to={"/"}>
+            <div className="text-lg md:text-2xl lg:text-3xl flex items-center space-x-2 text-brandOrange">
+              <GiCircuitry />
+              <span>
+                <span className="font-bold">XIR</span>ION
+              </span>
+            </div>
+          </Link>
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-4 rounded-md font-semibold">
-            <span className="px-3 py-2  text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-              Upload Product
-            </span>
-            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-              Orders
-            </span>
+            <Link to="/orders">
+              <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+                Pending Orders
+              </span>
+            </Link>
+            <Link to={"/upload-product"}>
+              <span className="px-3 py-2 text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
+                Upload Product
+              </span>
+            </Link>
+
             <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
               Stock
             </span>
