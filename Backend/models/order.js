@@ -23,8 +23,8 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["placed", "shipped", "delivered", "cancelled"],
-    default: "placed",
+    enum: ["Placed", "Shipped", "Delivered", "Cancelled"],
+    default: "Placed",
   },
   mpesaConfirmationCode: { type: String, required: true },
   CheckoutRequestID: { type: String, required: true },

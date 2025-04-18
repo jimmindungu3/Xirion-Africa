@@ -163,7 +163,18 @@ router.post("/mpesa/callback", async (req, res) => {
   return res.status(200).json({ message: "Callback Received" });
 });
 
+// GET /api/orders - fetch all orders
+router.get("/get-all-orders", async (req, res) => {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 // GET order by checkout id
+// For payment confirmation short polling
 router.get("/:CheckoutRequestID", async (req, res) => {
   try {
     const { CheckoutRequestID } = req.params;
