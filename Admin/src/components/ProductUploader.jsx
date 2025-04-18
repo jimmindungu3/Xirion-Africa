@@ -217,277 +217,274 @@ const ProductUploader = () => {
   };
 
   return (
-    <>
-      <Nav />
-      <div className="max-w-7xl mx-auto mt-4 px-4 mb-12">
-        <h2 className="text-lg font-semibold border-b border-gray-200 pb-2">
-          Upload New Product
-        </h2>
-        <div className="mt-4 flex flex-col md:grid grid-cols-2 gap-x-6">
-          <div className="flex flex-col space-y-4">
-            {/* Left column */}
+    <div className="max-w-7xl mx-auto px-4 mb-12">
+      <h2 className="text-lg font-semibold border-b border-gray-200 pb-2">
+        Upload New Product
+      </h2>
+      <div className="mt-4 flex flex-col md:grid grid-cols-2 gap-x-6">
+        <div className="flex flex-col space-y-4">
+          {/* Left column */}
 
-            {/* TITLE */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Product Title
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={title}
-                placeholder="E.g Samsung Galaxy S24 Ultra"
-                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
+          {/* TITLE */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Product Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={title}
+              placeholder="E.g Samsung Galaxy S24 Ultra"
+              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* DESCRIPTION */}
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-900">
+              Product Description
+            </label>
+            <textarea
+              type="text"
+              name="description"
+              value={description}
+              rows={7}
+              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+              placeholder="E.g. The Samsung Galaxy S24 Ultra is the ultimate flagship smartphone, featuring a 6.8-inch Dynamic AMOLED 2X display with a 120Hz refresh rate and QHD+ resolution, protected by Corning Gorilla Glass Victus 3. Powered by the Snapdragon 8 Gen 3 (or Exynos 2400 in some regions), it delivers blazing-fast performance for gaming and multitasking..."
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* PRICE */}
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-900">
+              Product Price
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={price}
+              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+              placeholder="E.g. 120000"
+              onChange={(e) => setPrice(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* QUANTITY IN STOCK */}
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-900">
+              Quantity In stock
+            </label>
+            <input
+              type="number"
+              name="quantity"
+              value={quantityInStock}
+              className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+              placeholder="E.g. 50"
+              onChange={(e) => setQuantityInStock(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="flex flex-col">
+          {/* PRODUCT IMAGES with PREVIEW */}
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-900">
+              Images
+            </label>
+
+            {/* Image previews */}
+            <div className="flex gap-4 flex-wrap mb-4">
+              {imagePreviews.length === 0 ? (
+                <p className="text-gray-500">No images selected</p>
+              ) : (
+                imagePreviews.map((img, index) => (
+                  <div
+                    key={index}
+                    className="relative h-16 w-16 border border-gray-400"
+                  >
+                    <img
+                      src={img}
+                      alt={`Preview ${index}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      className="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full"
+                      onClick={() => removeImage(index)}
+                      type="button"
+                    >
+                      <RiCloseFill />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
 
-            {/* DESCRIPTION */}
-            <div>
-              <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Product Description
-              </label>
-              <textarea
-                type="text"
-                name="description"
-                value={description}
-                rows={7}
-                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="E.g. The Samsung Galaxy S24 Ultra is the ultimate flagship smartphone, featuring a 6.8-inch Dynamic AMOLED 2X display with a 120Hz refresh rate and QHD+ resolution, protected by Corning Gorilla Glass Victus 3. Powered by the Snapdragon 8 Gen 3 (or Exynos 2400 in some regions), it delivers blazing-fast performance for gaming and multitasking..."
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </div>
-
-            {/* PRICE */}
-            <div>
-              <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Product Price
-              </label>
+            {/* File input and clear button */}
+            <div className="flex gap-4 items-center">
               <input
-                type="number"
-                name="price"
-                value={price}
-                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="E.g. 120000"
-                onChange={(e) => setPrice(e.target.value)}
+                type="file"
+                name="image"
+                multiple
+                // className="border rounded-r-md border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                onChange={handleImageUpload}
+                ref={fileInputRef}
                 required
               />
-            </div>
-
-            {/* QUANTITY IN STOCK */}
-            <div>
-              <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Quantity In stock
-              </label>
-              <input
-                type="number"
-                name="quantity"
-                value={quantityInStock}
-                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                placeholder="E.g. 50"
-                onChange={(e) => setQuantityInStock(e.target.value)}
-                required
-              />
+              {imageFiles.length > 0 && (
+                <button
+                  className="px-3 py-0.5 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
+                  onClick={clearImages}
+                  type="button"
+                >
+                  Clear Images
+                </button>
+              )}
             </div>
           </div>
 
-          {/* RIGHT COLUMN */}
-          <div className="flex flex-col">
-            {/* PRODUCT IMAGES with PREVIEW */}
-            <div>
-              <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Images
-              </label>
-
-              {/* Image previews */}
-              <div className="flex gap-4 flex-wrap mb-4">
-                {imagePreviews.length === 0 ? (
-                  <p className="text-gray-500">No images selected</p>
-                ) : (
-                  imagePreviews.map((img, index) => (
-                    <div
-                      key={index}
-                      className="relative h-16 w-16 border border-gray-400"
-                    >
-                      <img
-                        src={img}
-                        alt={`Preview ${index}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        className="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full"
-                        onClick={() => removeImage(index)}
-                        type="button"
-                      >
-                        <RiCloseFill />
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* File input and clear button */}
-              <div className="flex gap-4 items-center">
-                <input
-                  type="file"
-                  name="image"
-                  multiple
-                  // className="border rounded-r-md border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                  onChange={handleImageUpload}
-                  ref={fileInputRef}
-                  required
-                />
-                {imageFiles.length > 0 && (
-                  <button
-                    className="px-3 py-0.5 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
-                    onClick={clearImages}
-                    type="button"
-                  >
-                    Clear Images
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* PRODUCT CATEGORIES */}
-            <div className="mt-4">
-              <legend className="font-semibold">Categories</legend>
-              <div className="grid grid-cols-2 mx-4">
-                {categories.map((cat) => (
-                  <span className="space-x-2 text-gray-800" key={cat.title}>
-                    <input
-                      type="checkbox"
-                      id={`cat-${cat.title}`}
-                      name="category"
-                      value={cat.title}
-                      checked={chosenCategories.includes(cat.title)}
-                      onChange={() => handleCategories(cat.title)}
-                    />
-                    <label htmlFor={`cat-${cat.title}`}>{cat.title}</label>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* CUSTOM ATTRIBUTES */}
-            <div>
-              <h4 className="mt-4 mb-2 font-semibold">Custom Attributes</h4>
-
-              <div className="flex flex-wrap">
-                {customAttributes.map((attr, index) => (
-                  <span
-                    key={index}
-                    className="flex items-center gap-1 py-2 px-3 mb-2 mr-2 rounded-md bg-green-100"
-                  >
-                    <span className="font-medium">{attr.attribute}:</span>
-                    <span>{attr.value}</span>
-                    <RiCloseFill
-                      className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
-                      onClick={() => removeCustomAttribute(index)}
-                    />
-                  </span>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-12 gap-2 items-end">
-                <div className="col-span-4">
-                  <label className="block mb-2 text-sm font-medium text-gray-900">
-                    Attribute
-                  </label>
+          {/* PRODUCT CATEGORIES */}
+          <div className="mt-4">
+            <legend className="font-semibold">Categories</legend>
+            <div className="grid grid-cols-2 mx-4">
+              {categories.map((cat) => (
+                <span className="space-x-2 text-gray-800" key={cat.title}>
                   <input
-                    type="text"
-                    name="attribute"
-                    value={customAttribute}
-                    className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                    placeholder="E.g. Material, Color, Weight, Size, etc"
-                    onChange={(e) => setCustomAttribute(e.target.value)}
+                    type="checkbox"
+                    id={`cat-${cat.title}`}
+                    name="category"
+                    value={cat.title}
+                    checked={chosenCategories.includes(cat.title)}
+                    onChange={() => handleCategories(cat.title)}
                   />
-                </div>
-                <div className="col-span-6">
-                  <label className="block mb-2 text-sm font-medium text-gray-900">
-                    Value
-                  </label>
-                  <input
-                    type="text"
-                    name="value"
-                    value={customAttributeValue}
-                    className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                    placeholder="E.g. Leather, Black, 5kg, 400mm, etc"
-                    onChange={(e) => setCustomAttributeValue(e.target.value)}
+                  <label htmlFor={`cat-${cat.title}`}>{cat.title}</label>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* CUSTOM ATTRIBUTES */}
+          <div>
+            <h4 className="mt-4 mb-2 font-semibold">Custom Attributes</h4>
+
+            <div className="flex flex-wrap">
+              {customAttributes.map((attr, index) => (
+                <span
+                  key={index}
+                  className="flex items-center gap-1 py-2 px-3 mb-2 mr-2 rounded-md bg-green-100"
+                >
+                  <span className="font-medium">{attr.attribute}:</span>
+                  <span>{attr.value}</span>
+                  <RiCloseFill
+                    className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
+                    onClick={() => removeCustomAttribute(index)}
                   />
-                </div>
-                <div className="col-span-2">
-                  <button
-                    className="w-ful px-4 py-2 bg-gray-200 border border-gray-500 rounded-md hover:bg-gray-300"
-                    onClick={addCustomAttribute}
-                    type="button"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
+                </span>
+              ))}
             </div>
 
-            {/* KEYWORDS */}
-            <div className="mt-4">
-              <h4 className="font-semibold mb-2">Keywords</h4>
-              <div className="flex flex-wrap gap-2">
-                {keywords.map((kw) => (
-                  <span
-                    key={kw}
-                    className="flex items-center gap-1 py-2 px-3 mb-2 rounded-md bg-green-100"
-                  >
-                    {kw}
-                    <RiCloseFill
-                      className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
-                      onClick={() => removeKeyword(kw)}
-                    />
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
+            <div className="grid grid-cols-12 gap-2 items-end">
+              <div className="col-span-4">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
+                  Attribute
+                </label>
                 <input
                   type="text"
-                  name="keywords"
+                  name="attribute"
+                  value={customAttribute}
                   className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                  placeholder="E.g. Samsung, Galaxy"
-                  value={keyword}
-                  onChange={(e) => setKeyword(e.target.value)}
+                  placeholder="E.g. Material, Color, Weight, Size, etc"
+                  onChange={(e) => setCustomAttribute(e.target.value)}
                 />
+              </div>
+              <div className="col-span-6">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
+                  Value
+                </label>
+                <input
+                  type="text"
+                  name="value"
+                  value={customAttributeValue}
+                  className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  placeholder="E.g. Leather, Black, 5kg, 400mm, etc"
+                  onChange={(e) => setCustomAttributeValue(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
                 <button
+                  className="w-ful px-4 py-2 bg-gray-200 border border-gray-500 rounded-md hover:bg-gray-300"
+                  onClick={addCustomAttribute}
                   type="button"
-                  className="px-4 py-2 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
-                  onClick={addKeyWord}
                 >
                   Add
                 </button>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ACTION BUTTONS */}
-        <div className="mt-8 flex gap-8 text-white font-semibold">
-          <button
-            className="py-2 bg-gray-400 w-full rounded-md hover:bg-gray-500"
-            onClick={handleClear}
-            type="button"
-          >
-            Clear
-          </button>
-          <button
-            className="bg-orange-500 w-full rounded-md py-2 hover:bg-orange-600 flex items-center justify-center"
-            onClick={handleUpload}
-            type="button"
-          >
-            {uploading ? <Loader text={"Uploading"} /> : "Upload"}
-          </button>
+          {/* KEYWORDS */}
+          <div className="mt-4">
+            <h4 className="font-semibold mb-2">Keywords</h4>
+            <div className="flex flex-wrap gap-2">
+              {keywords.map((kw) => (
+                <span
+                  key={kw}
+                  className="flex items-center gap-1 py-2 px-3 mb-2 rounded-md bg-green-100"
+                >
+                  {kw}
+                  <RiCloseFill
+                    className="text-lg cursor-pointer ml-2 text-white bg-red-500 rounded-full"
+                    onClick={() => removeKeyword(kw)}
+                  />
+                </span>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                name="keywords"
+                className="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                placeholder="E.g. Samsung, Galaxy"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-200 border border-gray-500 rounded hover:bg-gray-300"
+                onClick={addKeyWord}
+              >
+                Add
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+
+      {/* ACTION BUTTONS */}
+      <div className="mt-8 flex gap-8 text-white font-semibold">
+        <button
+          className="py-2 bg-gray-400 w-full rounded-md hover:bg-gray-500"
+          onClick={handleClear}
+          type="button"
+        >
+          Clear
+        </button>
+        <button
+          className="bg-orange-500 w-full rounded-md py-2 hover:bg-orange-600 flex items-center justify-center"
+          onClick={handleUpload}
+          type="button"
+        >
+          {uploading ? <Loader text={"Uploading"} /> : "Upload"}
+        </button>
+      </div>
+    </div>
   );
 };
 
