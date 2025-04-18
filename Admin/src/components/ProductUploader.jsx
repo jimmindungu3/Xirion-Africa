@@ -1,5 +1,3 @@
-// upload product component
-
 import React, { useState, useRef } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import Loader from "../components/Loader";
@@ -221,9 +219,9 @@ const ProductUploader = () => {
   return (
     <>
       <Nav />
-      <div className="max-w-7xl mx-auto mt-4 px-4">
+      <div className="max-w-7xl mx-auto mt-4 px-4 mb-12">
         <h2 className="text-lg font-semibold border-b border-gray-200 pb-2">
-          Upload A New Product
+          Upload New Product
         </h2>
         <div className="mt-4 flex flex-col md:grid grid-cols-2 gap-x-6">
           <div className="flex flex-col space-y-4">
@@ -232,7 +230,7 @@ const ProductUploader = () => {
             {/* TITLE */}
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900">
-                Title
+                Product Title
               </label>
               <input
                 type="text"
@@ -248,7 +246,7 @@ const ProductUploader = () => {
             {/* DESCRIPTION */}
             <div>
               <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Description
+                Product Description
               </label>
               <textarea
                 type="text"
@@ -265,7 +263,7 @@ const ProductUploader = () => {
             {/* PRICE */}
             <div>
               <label className="block mb-2 text-sm font-semibold text-gray-900">
-                Price
+                Product Price
               </label>
               <input
                 type="number"
@@ -336,7 +334,7 @@ const ProductUploader = () => {
                   type="file"
                   name="image"
                   multiple
-                  className="border rounded-r-md border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  // className="border rounded-r-md border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500"
                   onChange={handleImageUpload}
                   ref={fileInputRef}
                   required
