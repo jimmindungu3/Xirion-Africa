@@ -24,11 +24,13 @@ app.use(
 
 // Import routes
 const productRoutes = require("./routes/products");
+const adminRoutes = require('./routes/admins')
 const usersRoutes = require("./routes/users");
 const orderRoutes = require("./routes/orders");
 
 // Use routes
 app.use("/api/products", productRoutes);
+app.use("/api/admin", adminRoutes)
 app.use("/api/users", usersRoutes);
 app.use("/api/orders", orderRoutes);
 
