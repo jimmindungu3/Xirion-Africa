@@ -93,7 +93,7 @@ router.post("/signin", async (req, res) => {
         return res
           .cookie("adminToken", token, {
             httpOnly: true,
-            secure: NODE_ENV === "production",
+            secure: NODE_ENV === "PRODUCTION",
             sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000, // 1 Day in milliseconds
           })
