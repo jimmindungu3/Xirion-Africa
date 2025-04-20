@@ -58,7 +58,7 @@ const SignIn = () => {
 
       // If successful, navigate to the upload product page
       toast.success("Signed In Successfully");
-      navigate("/upload-product");
+      navigate("/pending-orders");
     } catch (error) {
       // Set the error message from the caught error
       setError(error.message);

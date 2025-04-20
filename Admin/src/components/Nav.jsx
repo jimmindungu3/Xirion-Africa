@@ -18,7 +18,7 @@ const Nav = () => {
 
             {/* Navigation Links */}
             <div className="flex items-center space-x-4 rounded-md font-semibold">
-              <Link to="/orders">
+              <Link to="/pending-orders">
                 <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
                   Pending Orders
                 </span>

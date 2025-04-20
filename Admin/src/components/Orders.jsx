@@ -17,7 +17,9 @@ const Orders = () => {
     if (productMap[id]) return productMap[id];
 
     try {
-      const res = await fetch(`${BASE_URL}/api/products/${id}`);
+      const res = await fetch(`${BASE_URL}/api/products/${id}`, {
+        credentials: "include",
+      });
       const data = await res.json();
       setProductMap((prev) => ({ ...prev, [id]: data }));
       return data;
@@ -31,7 +33,9 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrdersWithProducts = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/orders/get-all-orders`);
+        const res = await fetch(`${BASE_URL}/api/admin/get-all-orders`, {
+          credentials: "include",
+        });
         const data = await res.json();
 
         const uniqueProductIds = new Set();
