@@ -17,7 +17,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "https://xirion-africa.vercel.app",
-      "https://admin-xirion-africa-je3h8j1uk-jimmindungu3s-projects.vercel.app"
+      "https://admin-xirion-africa.vercel.app"
     ],
     credentials: true,
   })
