@@ -8,10 +8,10 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const DB_URI = process.env.DB_URI;
-app.use(cookieParser);
-app.use(bodyParser.json());
 
-// Middleware
+// Use middlewares
+app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(
   cors({
