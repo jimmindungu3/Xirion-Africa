@@ -2,6 +2,10 @@ const express = require("express");
 const Admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const verifyAdminToken = require("../middleware/verifyToken");
+const Order = require("../models/order");
+
 const JWT_SECRET = process.env.JWT_SECRET;
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -81,7 +85,6 @@ router.post("/signin", async (req, res) => {
         existingAdmin.password
       );
       if (passwordsMatch) {
-        console.log(existingAdmin._id);
         // Create jwt cookie here and send it with response to client
         const token = jwt.sign(
           { id: existingAdmin._id, role: existingAdmin.role },
@@ -94,7 +97,7 @@ router.post("/signin", async (req, res) => {
           .cookie("adminToken", token, {
             httpOnly: true,
             secure: NODE_ENV === "PRODUCTION",
-            sameSite: "none",
+            sameSite: NODE_ENV === "PRODUCTION" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000, // 1 Day in milliseconds
           })
           .status(200)
@@ -107,6 +110,16 @@ router.post("/signin", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json(error);
+  }
+});
+
+// GET /api/admin/get-all-orders - fetch all orders
+router.get("/get-all-orders", verifyAdminToken, async (req, res) => {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
     res.status(500).json(error);
   }
 });
