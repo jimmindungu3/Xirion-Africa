@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
+import Loader from "../components/Loader";
+
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -54,7 +57,7 @@ const SignIn = () => {
       }
 
       // If successful, navigate to the upload product page
-      toast.success("Signed In Successfully")
+      toast.success("Signed In Successfully");
       navigate("/upload-product");
     } catch (error) {
       // Set the error message from the caught error
@@ -140,7 +143,9 @@ const SignIn = () => {
             className="w-full text-white bg-brandOrange hover:bg-brandOrangeDark focus:ring-4 focus:outline-none focus:ring-primary-300 font-semibold rounded-lg text-sm px-5 py-2.5"
             disabled={isLoading}
           >
-            {isLoading ? "Signing in..." : "Sign in"}
+            <div className="flex justify-center items-center">
+              {isLoading ? <Loader text={"Signing in"} /> : "Sign in"}
+            </div>
           </button>
         </form>
       </div>
