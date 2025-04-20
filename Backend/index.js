@@ -2,11 +2,13 @@ const express = require("express");
 const env = require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const DB_URI = process.env.DB_URI;
+app.use(cookieParser);
 app.use(bodyParser.json());
 
 // Middleware
@@ -17,7 +19,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "https://xirion-africa.vercel.app",
-      "https://admin-xirion-africa.vercel.app"
+      "https://admin-xirion-africa.vercel.app",
     ],
     credentials: true,
   })
@@ -25,13 +27,13 @@ app.use(
 
 // Import routes
 const productRoutes = require("./routes/products");
-const adminRoutes = require('./routes/admins')
+const adminRoutes = require("./routes/admins");
 const usersRoutes = require("./routes/users");
 const orderRoutes = require("./routes/orders");
 
 // Use routes
 app.use("/api/products", productRoutes);
-app.use("/api/admin", adminRoutes)
+app.use("/api/admin", adminRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/orders", orderRoutes);
 
