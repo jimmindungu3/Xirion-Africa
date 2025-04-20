@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { MdCall, MdEmail } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
-import Nav from "./Nav";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [productMap, setProductMap] = useState({});
+
+  // Configure Base URL
+  const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
+  const PROD_URL_BASE = import.meta.env.VITE_PROD_URL_BASE;
+  const BASE_URL =
+    ENVIRONMENT === "DEVELOPMENT" ? "http://localhost:5000" : PROD_URL_BASE;
 
   // Fetch product details by ID
   const fetchProductById = async (id) => {
     if (productMap[id]) return productMap[id];
 
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`);
+      const res = await fetch(`${BASE_URL}/api/products/${id}`);
       const data = await res.json();
       setProductMap((prev) => ({ ...prev, [id]: data }));
       return data;
@@ -26,9 +31,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrdersWithProducts = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:5000/api/orders/get-all-orders"
-        );
+        const res = await fetch(`${BASE_URL}/api/orders/get-all-orders`);
         const data = await res.json();
 
         const uniqueProductIds = new Set();
