@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MdCall, MdEmail } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
+
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [productMap, setProductMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   // Configure Base URL
   const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
@@ -22,14 +27,14 @@ const Orders = () => {
       const res = await fetch(`${BASE_URL}/api/products/${id}`, {
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
-      
+
       if (!res.ok) {
         throw new Error(`Failed to fetch product: ${res.status}`);
       }
-      
+
       const data = await res.json();
       setProductMap((prev) => ({ ...prev, [id]: data }));
       return data;
@@ -44,23 +49,25 @@ const Orders = () => {
     const fetchOrdersWithProducts = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         // This was the problematic line - adding proper headers
-        const res = await fetch(`${BASE_URL}/api/admin/get-all-orders`, {
+        const res = await fetch(`${BASE_URL}/api/admin/get-pending-orders`, {
           method: "GET",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         });
-        
+
         if (!res.ok) {
           // Check what's going wrong
           const errorData = await res.json();
-          throw new Error(errorData.message || `HTTP error! Status: ${res.status}`);
+          throw new Error(
+            errorData.message || `HTTP error! Status: ${res.status}`
+          );
         }
-        
+
         const data = await res.json();
 
         // Process unique product IDs
@@ -94,15 +101,17 @@ const Orders = () => {
         method: "PUT",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
-      
+
       if (res.ok) {
         // Update local state to reflect changes
-        setOrders(orders.map(order => 
-          order._id === id ? {...order, status: "Cancelled"} : order
-        ));
+        setOrders(
+          orders.map((order) =>
+            order._id === id ? { ...order, status: "Cancelled" } : order
+          )
+        );
       }
     } catch (err) {
       console.error("Failed to cancel order:", err);
@@ -116,15 +125,17 @@ const Orders = () => {
         method: "PUT",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
-      
+
       if (res.ok) {
         // Update local state to reflect changes
-        setOrders(orders.map(order => 
-          order._id === id ? {...order, status: "Shipped"} : order
-        ));
+        setOrders(
+          orders.map((order) =>
+            order._id === id ? { ...order, status: "Shipped" } : order
+          )
+        );
       }
     } catch (err) {
       console.error("Failed to mark order as shipped:", err);
@@ -133,7 +144,9 @@ const Orders = () => {
 
   // Loading state
   if (loading) {
-    return <div className="px-4 max-w-7xl mx-auto mb-12">Loading orders...</div>;
+    return (
+      <div className="px-4 max-w-7xl mx-auto mb-12">Loading orders...</div>
+    );
   }
 
   // Error state
@@ -141,11 +154,11 @@ const Orders = () => {
     return (
       <div className="px-4 max-w-7xl mx-auto mb-12">
         <p className="text-red-500">Error loading orders: {error}</p>
-        <button 
-          onClick={() => window.location.reload()}
-          className="mt-2 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        <button
+          onClick={() => navigate("/")}
+          className="mt-2 px-4 py-2 bg-brandOrange text-white font-semibold font-sm rounded hover:bg-orange-600"
         >
-          Try Again
+          Sign In
         </button>
       </div>
     );
@@ -155,8 +168,12 @@ const Orders = () => {
   if (orders.length === 0) {
     return (
       <div className="px-4 max-w-7xl mx-auto mb-12">
-        <h2 className="text-xl font-semibold text-gray-800 mb-3">Orders</h2>
-        <p>No orders found</p>
+        <div className="max-w-md mt-4 p-6 bg-white shadow-md rounded-2xl flex space-x-4 border border-red-200">
+          <FaExclamationTriangle className="text-red-500 text-2xl" />
+          <div>
+            <p className="font-medium text-gray-800">No Pending Orders</p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -228,14 +245,18 @@ const Orders = () => {
                 <button
                   onClick={() => handleCancel(order._id)}
                   className="px-2 py-1 text-sm rounded text-white bg-gray-500 hover:bg-gray-400"
-                  disabled={order.status === "Cancelled" || order.status === "Shipped"}
+                  disabled={
+                    order.status === "Cancelled" || order.status === "Shipped"
+                  }
                 >
                   Cancel Order
                 </button>
                 <button
                   onClick={() => handleMarkShipped(order._id)}
                   className="px-2 py-1 text-sm rounded bg-brandOrange text-white font-semibold hover:bg-orange-600"
-                  disabled={order.status === "Cancelled" || order.status === "Shipped"}
+                  disabled={
+                    order.status === "Cancelled" || order.status === "Shipped"
+                  }
                 >
                   Mark Shipped
                 </button>
@@ -258,7 +279,9 @@ const Orders = () => {
                           src={product.images?.[0]}
                           alt={product.title}
                           className="w-10 h-10 object-cover rounded-md"
-                          onError={(e) => {e.target.src = "/placeholder.png"}}
+                          onError={(e) => {
+                            e.target.src = "/placeholder.png";
+                          }}
                         />
                       )}
                       <div className="text-xs">
