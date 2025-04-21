@@ -4,10 +4,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const verifyAdminToken = (req, res, next) => {
   const adminToken = req.cookies.adminToken;
-  
+
   // Debug line to help troubleshoot
-  console.log("Cookie received:", req.cookies);
-  
+  // console.log("Cookie received:", req.cookies);
+
   if (!adminToken) {
     return res
       .status(401)
@@ -17,7 +17,7 @@ const verifyAdminToken = (req, res, next) => {
   try {
     // Verify the token
     const decodedToken = jwt.verify(adminToken, JWT_SECRET);
-    
+
     // Attach the admin object to the request object
     req.admin = decodedToken;
     next();

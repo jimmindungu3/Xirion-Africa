@@ -114,10 +114,10 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-// GET /api/admin/get-all-orders - fetch all orders
-router.get("/get-all-orders", verifyAdminToken, async (req, res) => {
+// GET /api/admin/get-pending-orders - fetch all orders
+router.get("/get-pending-orders", verifyAdminToken, async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find({ status: "Pending" });
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ success: false, error });
