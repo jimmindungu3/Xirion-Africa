@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MdCall, MdEmail } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
 
-import { FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle, FaSpinner } from "react-icons/fa";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -142,10 +142,14 @@ const Orders = () => {
     }
   };
 
-  // Loading state
   if (loading) {
     return (
-      <div className="px-4 max-w-7xl mx-auto mb-12">Loading orders...</div>
+      <div className="px-4 max-w-7xl mx-auto mb-12">
+        <div className="max-w-md mt-4 p-6 bg-white shadow-md rounded-2xl flex space-x-4 items-center border border-gray-200">
+          <FaSpinner className="text-gray-500 text-2xl animate-spin" />
+          <p className="font-medium text-gray-800">Loading orders...</p>
+        </div>
+      </div>
     );
   }
 
@@ -153,13 +157,20 @@ const Orders = () => {
   if (error) {
     return (
       <div className="px-4 max-w-7xl mx-auto mb-12">
-        <p className="text-red-500">Error loading orders: {error}</p>
-        <button
-          onClick={() => navigate("/")}
-          className="mt-2 px-4 py-2 bg-brandOrange text-white font-semibold font-sm rounded hover:bg-orange-600"
-        >
-          Sign In
-        </button>
+        <div className="max-w-md mt-4 p-6 bg-white shadow-md rounded-2xl flex space-x-4 border border-red-200">
+          <FaExclamationTriangle className="text-red-500 text-2xl" />
+          <div>
+            <p className="font-medium text-gray-800 mb-2">
+              Error loading orders: {error}
+            </p>
+            <button
+              onClick={() => navigate("/")}
+              className="px-3 py-1 bg-brandOrange text-white font-medium rounded hover:bg-orange-600"
+            >
+              Sign In
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
