@@ -120,7 +120,71 @@ router.get("/get-all-orders", verifyAdminToken, async (req, res) => {
     const orders = await Order.find();
     res.status(200).json(orders);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ success: false, error });
+  }
+});
+
+// PUT /api/admin/cancel-order/:id - update order status to Cancelled
+router.put("/cancel-order/:id", verifyAdminToken, async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status: "Cancelled" },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to cancel order",
+      error: error.message,
+    });
+  }
+});
+
+// PUT /api/admin/ship-order/:id - update order status to Shipped
+router.put("/ship-order/:id", verifyAdminToken, async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status: "Shipped" },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error marking order as shipped:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update order status",
+      error: error.message,
+    });
   }
 });
 

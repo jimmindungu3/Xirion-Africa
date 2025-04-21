@@ -5,6 +5,8 @@ import { IoLocationSharp } from "react-icons/io5";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [productMap, setProductMap] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Configure Base URL
   const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
@@ -19,7 +21,15 @@ const Orders = () => {
     try {
       const res = await fetch(`${BASE_URL}/api/products/${id}`, {
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
       });
+      
+      if (!res.ok) {
+        throw new Error(`Failed to fetch product: ${res.status}`);
+      }
+      
       const data = await res.json();
       setProductMap((prev) => ({ ...prev, [id]: data }));
       return data;
@@ -32,17 +42,34 @@ const Orders = () => {
   // Fetch all orders and their products
   useEffect(() => {
     const fetchOrdersWithProducts = async () => {
+      setLoading(true);
+      setError(null);
+      
       try {
+        // This was the problematic line - adding proper headers
         const res = await fetch(`${BASE_URL}/api/admin/get-all-orders`, {
+          method: "GET",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
+        
+        if (!res.ok) {
+          // Check what's going wrong
+          const errorData = await res.json();
+          throw new Error(errorData.message || `HTTP error! Status: ${res.status}`);
+        }
+        
         const data = await res.json();
 
+        // Process unique product IDs
         const uniqueProductIds = new Set();
         data.forEach((order) => {
           order.items.forEach((item) => uniqueProductIds.add(item.productId));
         });
 
+        // Fetch all product details in parallel
         await Promise.all(
           Array.from(uniqueProductIds).map((id) => fetchProductById(id))
         );
@@ -50,6 +77,9 @@ const Orders = () => {
         setOrders(data);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -57,15 +87,79 @@ const Orders = () => {
   }, []);
 
   // Order action handlers
-  const handleCancel = (id) => {
-    console.log("Cancel Order:", id);
+  const handleCancel = async (id) => {
     // Implement cancellation logic here
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/cancel-order/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      
+      if (res.ok) {
+        // Update local state to reflect changes
+        setOrders(orders.map(order => 
+          order._id === id ? {...order, status: "Cancelled"} : order
+        ));
+      }
+    } catch (err) {
+      console.error("Failed to cancel order:", err);
+    }
   };
 
-  const handleMarkShipped = (id) => {
-    console.log("Mark as Shipped:", id);
+  const handleMarkShipped = async (id) => {
     // Implement shipping logic here
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/ship-order/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      
+      if (res.ok) {
+        // Update local state to reflect changes
+        setOrders(orders.map(order => 
+          order._id === id ? {...order, status: "Shipped"} : order
+        ));
+      }
+    } catch (err) {
+      console.error("Failed to mark order as shipped:", err);
+    }
   };
+
+  // Loading state
+  if (loading) {
+    return <div className="px-4 max-w-7xl mx-auto mb-12">Loading orders...</div>;
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="px-4 max-w-7xl mx-auto mb-12">
+        <p className="text-red-500">Error loading orders: {error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (orders.length === 0) {
+    return (
+      <div className="px-4 max-w-7xl mx-auto mb-12">
+        <h2 className="text-xl font-semibold text-gray-800 mb-3">Orders</h2>
+        <p>No orders found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 max-w-7xl mx-auto mb-12">
@@ -134,12 +228,14 @@ const Orders = () => {
                 <button
                   onClick={() => handleCancel(order._id)}
                   className="px-2 py-1 text-sm rounded text-white bg-gray-500 hover:bg-gray-400"
+                  disabled={order.status === "Cancelled" || order.status === "Shipped"}
                 >
                   Cancel Order
                 </button>
                 <button
                   onClick={() => handleMarkShipped(order._id)}
                   className="px-2 py-1 text-sm rounded bg-brandOrange text-white font-semibold hover:bg-orange-600"
+                  disabled={order.status === "Cancelled" || order.status === "Shipped"}
                 >
                   Mark Shipped
                 </button>
@@ -162,6 +258,7 @@ const Orders = () => {
                           src={product.images?.[0]}
                           alt={product.title}
                           className="w-10 h-10 object-cover rounded-md"
+                          onError={(e) => {e.target.src = "/placeholder.png"}}
                         />
                       )}
                       <div className="text-xs">
