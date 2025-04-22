@@ -146,7 +146,7 @@ const Orders = () => {
     return (
       <div className="px-4 max-w-7xl mx-auto mb-12">
         <div className="max-w-md mt-4 p-6 bg-white shadow-md rounded-2xl flex space-x-4 items-center border border-gray-200">
-          <FaSpinner className="text-gray-500 text-2xl animate-spin" />
+          <FaSpinner className="text-brandOrange text-xl animate-spin" />
           <p className="font-medium text-gray-800">Loading orders...</p>
         </div>
       </div>
