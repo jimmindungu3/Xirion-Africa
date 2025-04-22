@@ -159,290 +159,292 @@ const Checkout = () => {
         <SuccessModal setShowSTKsentModal={setShowSTKsentModal} />
       )}
       {showSTKError && <ErrorModal setShowSTKError={setShowSTKError} />}
-      <div className="max-w-7xl mx-auto p-4 my-8 border shadow-sm rounded-lg">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
-          Checkout
-        </h2>
+      <div className="max-w-7xl mx-auto px-2">
+        <div className="px-4 my-8 border shadow-sm rounded-lg">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
+            Checkout
+          </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Main Column: Form */}
-          <div className="md:col-span-7">
-            <form id="checkoutForm" onSubmit={handleSubmit}>
-              {/* Shipping Information */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">
-                  Shipping Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="John"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      required
-                      className={inputStyles}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="Kamau"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      required
-                      className={inputStyles}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="johnkamau@email.com"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className={inputStyles}
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="07XX XXX XXX"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className={inputStyles}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City/Town
-                    </label>
-                    <select
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      required
-                      className={inputStyles}
-                    >
-                      <option value="">Select City/Town</option>
-                      {kenyanCities.map((city) => (
-                        <option key={city.name} value={city.name}>
-                          {city.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payment Method Selection */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">
-                  Select a payment method
-                </h3>
-                <div className="flex gap-2 md:gap-4 mb-4 flex-nowrap">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("mpesa")}
-                    className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
-                      paymentMethod === "mpesa"
-                        ? "border-green-400 bg-green-200"
-                        : "border-gray-300"
-                    } flex items-center justify-center gap-2 hover:bg-green-100 transition text-nowrap`}
-                  >
-                    <FaMobile className="text-gray-700" />
-                    <span className="font-medium">M-Pesa</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("card")}
-                    className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
-                      paymentMethod === "card"
-                        ? "border-orange-500 bg-orange-50"
-                        : "border-gray-300"
-                    } flex items-center justify-center gap-2 hover:bg-orange-50 transition text-nowrap`}
-                  >
-                    <FaCreditCard className="text-gray-700" />
-                    <span className="font-medium">Credit/Debit Card</span>
-                  </button>
-                </div>
-
-                {/* Card Payment Form */}
-                {paymentMethod === "card" && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Card Number
-                      </label>
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        placeholder="1234 5678 9012 3456"
-                        required={paymentMethod === "card"}
-                        className={inputStyles}
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          name="cardExpiry"
-                          value={formData.cardExpiry}
-                          onChange={handleInputChange}
-                          placeholder="MM/YY"
-                          required={paymentMethod === "card"}
-                          className={inputStyles}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          CVC
-                        </label>
-                        <input
-                          type="text"
-                          name="cardCVC"
-                          value={formData.cardCVC}
-                          onChange={handleInputChange}
-                          placeholder="123"
-                          required={paymentMethod === "card"}
-                          className={inputStyles}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* M-Pesa Form */}
-                {paymentMethod === "mpesa" && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {/* Main Column: Form */}
+            <div className="md:col-span-7">
+              <form id="checkoutForm" onSubmit={handleSubmit}>
+                {/* Shipping Information */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">
+                    Shipping Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        M-Pesa Phone Number
+                        First Name
                       </label>
                       <input
                         type="text"
-                        name="mpesaNumber"
-                        value={formData.mpesaNumber}
+                        name="firstName"
+                        placeholder="John"
+                        value={formData.firstName}
                         onChange={handleInputChange}
-                        placeholder="07XX XXX XXX"
-                        required={paymentMethod === "mpesa"}
+                        required
                         className={inputStyles}
                       />
-                      <p className="mt-2 text-sm text-gray-600">
-                        You will receive an STK push to complete payment once
-                        you place your order.
-                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        placeholder="Kamau"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                        className={inputStyles}
+                      />
                     </div>
                   </div>
-                )}
-              </div>
-            </form>
-          </div>
 
-          {/* Order Summary */}
-          <div className="md:col-span-5">
-            <div className="border p-4 rounded-lg h-fit sticky top-4 md:top-16">
-              <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-4">
-                Order Summary
-              </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="johnkamau@email.com"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className={inputStyles}
+                      />
+                    </div>
 
-              {/* Items Summary */}
-              <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Cart Total:</span>
-                  <span>KSh {getSubtotal().toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Shipping Fee:</span>
-                  <span>
-                    {formData.city
-                      ? `Ksh. ${shippingFee.toLocaleString()}`
-                      : "Select city to calculate"}
-                  </span>
-                </div>
-                <div className="border-t pt-2 mt-2 flex justify-between font-semibold">
-                  <span>Total:</span>
-                  <span className="text-orange-600">
-                    KSh {getTotalPrice().toLocaleString()}
-                  </span>
-                </div>
-              </div>
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="07XX XXX XXX"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                        className={inputStyles}
+                      />
+                    </div>
+                  </div>
 
-              {/* Order Items */}
-              <div className="mb-4 max-h-40 md:max-h-60 overflow-y-auto pr-2">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Your cart Items:
-                </h4>
-                {cart.map((item) => (
-                  <div
-                    key={item.product._id}
-                    className="flex gap-2 py-2 border-b"
-                  >
-                    <img
-                      src={item.product?.images?.[0] || item.product.image}
-                      alt={item.product.title}
-                      className="w-10 h-10 rounded object-cover md:mr-4"
-                    />
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-800">
-                        {item.product.title}
-                      </p>
-                      <div className="flex justify-between text-xs text-gray-600">
-                        <span>Qty: {item.quantity}</span>
-                        <span>
-                          KSh{" "}
-                          {(
-                            item.product.price * item.quantity
-                          ).toLocaleString()}
-                        </span>
+                  <div className="mt-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        City/Town
+                      </label>
+                      <select
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
+                        className={inputStyles}
+                      >
+                        <option value="">Select City/Town</option>
+                        {kenyanCities.map((city) => (
+                          <option key={city.name} value={city.name}>
+                            {city.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Method Selection */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">
+                    Select a payment method
+                  </h3>
+                  <div className="flex gap-2 md:gap-4 mb-4 flex-nowrap">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("mpesa")}
+                      className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
+                        paymentMethod === "mpesa"
+                          ? "border-green-400 bg-green-200"
+                          : "border-gray-300"
+                      } flex items-center justify-center gap-2 hover:bg-green-100 transition text-nowrap`}
+                    >
+                      <FaMobile className="text-gray-700" />
+                      <span className="font-medium">M-Pesa</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("card")}
+                      className={`flex-1 min-w-0 py-2 px-2 md:px-4 rounded-lg border ${
+                        paymentMethod === "card"
+                          ? "border-orange-500 bg-orange-50"
+                          : "border-gray-300"
+                      } flex items-center justify-center gap-2 hover:bg-orange-50 transition text-nowrap`}
+                    >
+                      <FaCreditCard className="text-gray-700" />
+                      <span className="font-medium">Credit/Debit Card</span>
+                    </button>
+                  </div>
+
+                  {/* Card Payment Form */}
+                  {paymentMethod === "card" && (
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Card Number
+                        </label>
+                        <input
+                          type="text"
+                          name="cardNumber"
+                          value={formData.cardNumber}
+                          onChange={handleInputChange}
+                          placeholder="1234 5678 9012 3456"
+                          required={paymentMethod === "card"}
+                          className={inputStyles}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Expiry Date
+                          </label>
+                          <input
+                            type="text"
+                            name="cardExpiry"
+                            value={formData.cardExpiry}
+                            onChange={handleInputChange}
+                            placeholder="MM/YY"
+                            required={paymentMethod === "card"}
+                            className={inputStyles}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            CVC
+                          </label>
+                          <input
+                            type="text"
+                            name="cardCVC"
+                            value={formData.cardCVC}
+                            onChange={handleInputChange}
+                            placeholder="123"
+                            required={paymentMethod === "card"}
+                            className={inputStyles}
+                          />
+                        </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* M-Pesa Form */}
+                  {paymentMethod === "mpesa" && (
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          M-Pesa Phone Number
+                        </label>
+                        <input
+                          type="text"
+                          name="mpesaNumber"
+                          value={formData.mpesaNumber}
+                          onChange={handleInputChange}
+                          placeholder="07XX XXX XXX"
+                          required={paymentMethod === "mpesa"}
+                          className={inputStyles}
+                        />
+                        <p className="mt-2 text-sm text-gray-600">
+                          You will receive an STK push to complete payment once
+                          you place your order.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            {/* Order Summary */}
+            <div className="md:col-span-5">
+              <div className="border p-4 rounded-lg h-fit sticky top-4 md:top-16">
+                <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-4">
+                  Order Summary
+                </h3>
+
+                {/* Items Summary */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Cart Total:</span>
+                    <span>KSh {getSubtotal().toLocaleString()}</span>
                   </div>
-                ))}
-              </div>
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Shipping Fee:</span>
+                    <span>
+                      {formData.city
+                        ? `Ksh. ${shippingFee.toLocaleString()}`
+                        : "Select city to calculate"}
+                    </span>
+                  </div>
+                  <div className="border-t pt-2 mt-2 flex justify-between font-semibold">
+                    <span>Total:</span>
+                    <span className="text-orange-600">
+                      KSh {getTotalPrice().toLocaleString()}
+                    </span>
+                  </div>
+                </div>
 
-              {/* Checkout Button */}
-              <button
-                type="submit"
-                form="checkoutForm"
-                className="w-full bg-brandOrange text-white text-base py-3 font-semibold rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2"
-              >
-                <FaLock size={14} />
-                Pay KSh {getTotalPrice().toLocaleString()}
-              </button>
+                {/* Order Items */}
+                <div className="mb-4 max-h-40 md:max-h-60 overflow-y-auto pr-2">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Your cart Items:
+                  </h4>
+                  {cart.map((item) => (
+                    <div
+                      key={item.product._id}
+                      className="flex gap-2 py-2 border-b"
+                    >
+                      <img
+                        src={item.product?.images?.[0] || item.product.image}
+                        alt={item.product.title}
+                        className="w-10 h-10 rounded object-cover md:mr-4"
+                      />
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-gray-800">
+                          {item.product.title}
+                        </p>
+                        <div className="flex justify-between text-xs text-gray-600">
+                          <span>Qty: {item.quantity}</span>
+                          <span>
+                            KSh{" "}
+                            {(
+                              item.product.price * item.quantity
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-              <div className="mt-4 text-xs text-gray-500 text-center">
-                By placing your order, you agree to our Terms of Service and
-                Privacy Policy
+                {/* Checkout Button */}
+                <button
+                  type="submit"
+                  form="checkoutForm"
+                  className="w-full bg-brandOrange text-white text-base py-3 font-semibold rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2"
+                >
+                  <FaLock size={14} />
+                  Pay KSh {getTotalPrice().toLocaleString()}
+                </button>
+
+                <div className="mt-4 text-xs text-gray-500 text-center">
+                  By placing your order, you agree to our Terms of Service and
+                  Privacy Policy
+                </div>
               </div>
             </div>
           </div>
