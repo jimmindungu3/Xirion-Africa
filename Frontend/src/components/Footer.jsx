@@ -8,8 +8,8 @@ const Footer = () => {
 
   return (
     <footer className="text-sm md:text-base">
-      <div className="bg-gray-800 py-6 px-4 ">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="bg-gray-800 py-6">
+        <div className="max-w-7xl px-2 mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {/* My Account */}
           <div>
             <h3 className="font-bold text-white">My account</h3>

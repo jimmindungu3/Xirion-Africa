@@ -3,8 +3,8 @@ import { FaFacebook, FaTiktok, FaInstagram, FaXTwitter } from "react-icons/fa6";
 
 const About = () => {
   return (
-    <div className="bg-gray-200 py-8 md:pb-12 px-4 mt-10">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-gray-200 py-8 md:pb-12 mt-10">
+      <div className="max-w-7xl mx-auto px-2">
         <h2 className="text-base md:text-lg font-semibold">Why Shop With US</h2>
         <div className="text-sm lg:text-base space-y-2 mt-2">
           <p>
