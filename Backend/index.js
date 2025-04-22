@@ -21,7 +21,7 @@ app.use(
       "https://xirion-africa.vercel.app",
       "https://admin-xirion-africa.vercel.app",
     ],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
