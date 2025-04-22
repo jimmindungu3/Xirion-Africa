@@ -16,6 +16,7 @@ import SearchOrCategory from "./components/SearchOrCategory";
 import { toast } from "react-toastify";
 import Checkout from "./pages/Checkout.jsx";
 import Scroller from "./components/Scroller.jsx";
+import ViewOrders from "./pages/ViewOrders.jsx";
 
 // Contexts
 export const SignedInStatusContext = createContext();
@@ -153,6 +154,7 @@ const App = () => {
               <Route path="/confirm-email" element={<ConfirmEmail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/view-orders" element={<ViewOrders />} />
               <Route path="/recover-password" element={<RecoverPassword />} />
               <Route path="/edit-account" element={<EditAccount />} />
               <Route path="*" element={<NotFound />} />

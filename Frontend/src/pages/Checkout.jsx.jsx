@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import About from "../components/About";
 import SuccessModal from "../components/SuccessModal";
 import ErrorModal from "../components/ErrorModal";
+import { toast } from "react-toastify";
 
 // Set dynamic base URL
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
@@ -108,7 +109,7 @@ const Checkout = () => {
         const CheckoutRequestID = response.CheckoutRequestID;
         console.log(CheckoutRequestID);
 
-        console.log(`${BASE_URL}/api/orders/${CheckoutRequestID}`)
+        console.log(`${BASE_URL}/api/orders/${CheckoutRequestID}`);
 
         const intervalId = setInterval(() => {
           fetch(`${BASE_URL}/api/orders/${CheckoutRequestID}`)
@@ -116,7 +117,8 @@ const Checkout = () => {
             .then((data) => {
               if (data.CheckoutRequestID === CheckoutRequestID) {
                 clearInterval(intervalId); // Stop polling once order is confirmed
-                alert("Order placed successfully");
+                toast.success("Order placed successfully");
+                navigate("/view-orders");
               }
             })
             .catch((error) =>
