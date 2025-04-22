@@ -180,4 +180,24 @@ router.get("/:CheckoutRequestID", async (req, res) => {
   }
 });
 
+// Get all orders for a specific customer by email
+// Protect this route. Only logged in users should have access
+router.get("/by-email/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    // Find all orders with the matching customer email
+    const orders = await Order.find({ "customer.email": email });
+
+    if (orders.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders by email:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
 module.exports = router;

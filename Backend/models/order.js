@@ -23,7 +23,18 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
+    enum: [
+      "Pending", // Order placed
+      "Confirmed", // Payment verified
+      "Processing", // Order being packed/prepared
+      "Shipped", // Left the warehouse
+      "Waiting Pick Up", // En route to customer
+      "Delivered", // Successfully delivered
+      "Cancelled", // Cancelled before delivery
+      "Returned", // Returned by customer
+      "Refunded", // Refund issued
+      "Failed", // Payment/order error
+    ],
     default: "Pending",
   },
   mpesaConfirmationCode: { type: String, required: true },
