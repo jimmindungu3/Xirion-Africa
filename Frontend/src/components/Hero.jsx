@@ -65,17 +65,19 @@ const Hero = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto hidden md:flex pt-4 mb-6">
+    <div className="max-w-7xl mx-auto hidden md:flex pt-4 px-2 mb-6">
       {/* Left Column: Categories */}
-      <div className="w-1/4 bg-white shadow-md max-h-[490px] overflow-y-auto">
+      <div className="w-1/4 bg-white shadow-md max-h-[490px] overflow-y-auto pb-2">
         {categories.map((category, index) => (
           <div
             key={index}
-            className="px-3 py-1 hover:bg-gray-200 cursor-pointer rounded-md"
+            className="px-3 py-0.5 hover:bg-gray-200 cursor-pointer rounded-md"
             onClick={() => handleCategoryClick(category.title)}
           >
-            <h3 className="font-semibold text-gray-900">{category.title}</h3>
-            <p className="text-xs text-gray-500">{category.items}</p>
+            <h3 className="text-sm font-semibold text-gray-900">
+              {category.title}
+            </h3>
+            <p className="text-xs text-gray-700">{category.items}</p>
           </div>
         ))}
       </div>

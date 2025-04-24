@@ -47,7 +47,7 @@ const RandomProducts = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-2 mt-6">
+    <div className="max-w-7xl mx-auto px-2 mb-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base md:text-lg lg:text-2xl font-bold text-gray-900">
           Latest Stock
@@ -81,7 +81,7 @@ const RandomProducts = () => {
             : randomProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition cursor-pointer"
+                  className="product-card group flex flex-col h-full rounded-lg py-2 px-0.5 border hover:shadow-md transition cursor-pointer"
                   onClick={() => handleProductPreview(product)}
                 >
                   <div className="mb-2 h-28 md:h-40 w-full max-w-[160px] sm:max-w-[200px] mx-auto">

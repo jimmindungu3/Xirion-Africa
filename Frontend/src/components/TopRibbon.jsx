@@ -18,19 +18,18 @@ const categories = [
   { title: "Office Supplies" },
 ];
 
-const getInitials = (fullName) => {
-  if (!fullName) return "";
-  return fullName.split(" ")[0];
-};
-
 const TopRibbon = () => {
+  // Simple states
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const categoriesRef = useRef(null);
   const [initials, setInitials] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Refs
+  const dropdownRef = useRef(null);
+  const categoriesRef = useRef(null);
+
+  // Consume context
   const { signedInStatus, handleSignOut } = useContext(SignedInStatusContext);
   const { cart } = useContext(CartContext);
 
@@ -41,6 +40,12 @@ const TopRibbon = () => {
     if (searchTerm.trim()) {
       navigate(`/products?keywords=${encodeURIComponent(searchTerm)}`);
     }
+  };
+
+  const getInitials = (fullName) => {
+    if (!fullName) return "";
+    const names = fullName.split(" ");
+    return names[0].charAt(0) + "." + names[1].charAt(0);
   };
 
   // Calculate total number of items in cart
@@ -83,14 +88,14 @@ const TopRibbon = () => {
             <span className="hidden sm:inline font-medium">Categories</span>
           </div>
           {isCategoriesOpen && (
-            <div className="absolute left-0 mt-2 w-64 bg-gray-100 rounded-lg shadow-md overflow-hidden z-50">
+            <div className="absolute left-0 mt-2 ml-2 w-64 bg-gray-100 rounded-lg shadow-md overflow-hidden z-50">
               {categories.map((category, index) => (
                 <Link
                   key={index}
                   to={`/products?category=${encodeURIComponent(
                     category.title
                   )}`}
-                  className="block px-4 py-2 border-b border-white hover:bg-gray-100"
+                  className="block px-4 py-2 border-b border-white hover:bg-gray-200"
                   onClick={() => setIsCategoriesOpen(false)}
                 >
                   <span className="font-medium">{category.title}</span>
@@ -133,8 +138,10 @@ const TopRibbon = () => {
             <FaShoppingCart className="text-base md:text-lg lg:text-xl" />
             <span className="hidden sm:inline font-medium">Cart</span>
 
-            <span className="absolute -top-0.5 md:-top-1 -right-1 md:-right-2 bg-brandOrange text-white text-xs font-semibold 
-            px-1 md:px-2 md:py-0.5 rounded-full">
+            <span
+              className="absolute -top-0.5 md:-top-1 -right-1 md:-right-2 bg-brandOrange text-white text-xs font-semibold 
+            px-1 md:px-2 md:py-0.5 rounded-full"
+            >
               {cartItemCount || 0}
             </span>
           </Link>

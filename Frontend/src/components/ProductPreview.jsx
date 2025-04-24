@@ -69,7 +69,7 @@ const ProductPreview = () => {
                         <img
                           src={img}
                           alt={product.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       </div>
                     ))}

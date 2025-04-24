@@ -122,7 +122,7 @@ const TopSellers = () => {
             : bestSellers.map((product) => (
                 <SwiperSlide key={product._id} className="h-auto">
                   <div
-                    className="product-card group flex flex-col h-full rounded-lg p-2 border hover:shadow-md transition hover:cursor-pointer"
+                    className="product-card group flex flex-col h-full rounded-lg py-2 px-0.5 border hover:shadow-md transition hover:cursor-pointer"
                     onClick={() => handleProductPreview(product)}
                   >
                     {/* Product Image - Fixed height */}
@@ -139,6 +139,7 @@ const TopSellers = () => {
                         )}
                       </div>
                     </div>
+                    
                     {/* Product Details */}
                     <div className="px-2 flex flex-col flex-grow">
                       {/* Title - Fixed height */}
