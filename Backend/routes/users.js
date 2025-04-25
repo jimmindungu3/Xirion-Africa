@@ -23,6 +23,8 @@ router.post("/register", async (req, res) => {
       password,
       confirmPassword,
     } = req.body;
+
+    // Check if all required fields are provided
     if (
       !firstName ||
       !lastName ||
@@ -34,42 +36,68 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "All fields are required." });
     }
 
-    if (password !== confirmPassword)
+    // Check if passwords match
+    if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords don't match." });
+    }
 
     // Check if a user with the same email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ error: "User with that email already exists" });
+      return res.status(400).json({ error: "Email already registered" });
     }
-
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate verification code
     const verificationCode = generateVerificationCode();
 
-    const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      verificationCode,
-      password: hashedPassword,
-    });
+    try {
+      // Try to send verification email first before creating user
+      const transporterResponse = await sendVerificationCode(
+        email,
+        verificationCode
+      );
 
-    await newUser.save();
+      // Check if email was successfully sent
+      if (
+        transporterResponse.accepted &&
+        transporterResponse.accepted.includes(email)
+      ) {
+        // Only if email was successfully sent, create and save the user
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          verificationCode,
+          password: hashedPassword,
+        });
 
-    // Send verification email only if user is saved successfully
-    await sendVerificationCode(email, verificationCode);
-
-    res.status(201).json({
-      message: "User registered successfully. Verification code sent.",
-    });
+        const savedUser = await newUser.save();
+        return res.status(201).json({
+          success: true,
+          message: "User registered successfully. Verification code sent.",
+          savedUser,
+        });
+      } else {
+        // Email sending failed
+        return res.status(400).json({
+          success: false,
+          message: "Could not send verification code. Invalid email address.",
+        });
+      }
+    } catch (emailError) {
+      // Error occurred while sending email
+      console.error("Email sending error:", emailError);
+      return res.status(400).json({
+        success: false,
+        message:
+          "Could not send verification code. Please check the email address.",
+      });
+    }
   } catch (error) {
-    res.status(500).json({ error });
+    console.error("Registration error:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
 
@@ -78,17 +106,18 @@ router.post("/verify-email", async (req, res) => {
   try {
     const { email, verificationCode } = req.body;
     if (!email || !verificationCode) {
-      return res
-        .status(400)
-        .json({ error: "Email and verification code are required." });
+      return res.status(400).json({
+        success: false,
+        error: "Email and verification code are required.",
+      });
     }
 
-    // Find user by email and verification code
+    // Find user with matching email and verification code
     const user = await User.findOne({ email, verificationCode });
     if (!user) {
       return res
         .status(400)
-        .json({ error: "Invalid verification code or email." });
+        .json({ success: false, error: "Invalid verification code or email." });
     }
 
     // Check if the verification code is expired (30 minutes limit)
@@ -98,18 +127,21 @@ router.post("/verify-email", async (req, res) => {
 
     if (timeDiff > 30) {
       return res.status(400).json({
+        success: false,
         error: "Verification code has expired. Please request a new one.",
       });
     }
 
     // Update user verification status
     user.isVerified = true;
-    user.verificationCode = undefined; //
+    user.verificationCode = undefined;
     await user.save();
 
-    res.status(200).json({ message: "Email verified successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully." });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error." });
+    res.status(500).json({ success: false, error: "Internal server error." });
   }
 });
 
