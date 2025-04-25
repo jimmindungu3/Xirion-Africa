@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const signInRateLimiter = require("../middleware/signInRateLimiter");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const router = express.Router();
@@ -103,7 +104,7 @@ router.post("/verify-email", async (req, res) => {
 
     // Update user verification status
     user.isVerified = true;
-    user.verificationCode = undefined; // Clear verification code after successful verification
+    user.verificationCode = undefined; //
     await user.save();
 
     res.status(200).json({ message: "Email verified successfully." });
@@ -113,21 +114,40 @@ router.post("/verify-email", async (req, res) => {
 });
 
 // POST /api/signin - User sign-in route
-router.post("/signin", async (req, res) => {
+router.post("/signin", signInRateLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
       return res
         .status(400)
-        .json({ error: "Email and password are required." });
+        .json({ success: false, error: "Email and password required." });
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ error: "Invalid email" });
+    if (!user)
+      return res
+        .status(400)
+        .json({ success: false, error: "Email not registered" });
 
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword)
-      return res.status(400).json({ error: "Invalid password" });
+    if (user.isVerified === false) {
+      return res
+        .status(403)
+        .json({ success: false, error: "Email registered but not verified" });
+    }
 
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (!isCorrectPassword) {
+      // Increment login attempts
+      await User.findByIdAndUpdate(user._id, {
+        $inc: { loginAttempts: 1 },
+      });
+      return res
+        .status(400)
+        .json({ success: false, error: "Incorrect password" });
+    }
+
+    // Reset login attempts on successful login
+    await User.findByIdAndUpdate(user._id, { loginAttempts: 0 });
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -143,11 +163,12 @@ router.post("/signin", async (req, res) => {
     });
 
     res.status(200).json({
+      success: true,
       message: "User signed in successfully.",
       fullName,
     });
   } catch (error) {
-    res.status(500).json({ error: "Server error." });
+    res.status(500).json({ success: false, error: "Server error." });
   }
 });
 

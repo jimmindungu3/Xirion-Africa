@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     isVerified: { type: Boolean, default: false },
     verificationCode: { type: String },
+    loginAttempts: { type: Number, default: 0 },
   },
   { timestamps: true } // Auto-manages createdAt & updatedAt
 );
