@@ -9,7 +9,6 @@ const BASE_URL =
   ENVIRONMENT === "DEVELOPMENT" ? "http://localhost:5000" : PROD_URL_BASE;
 
 const SignUp = () => {
-  const navigate = useNavigate();
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [hidePassword, setHidePassword] = useState(true);
   const [emailNotRegistered, setEmailNotRegistered] = useState(true);
@@ -22,6 +21,8 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,8 +53,7 @@ const SignUp = () => {
         localStorage.setItem("email", formData.email);
         navigate("/confirm-email", { state: formData.email });
       } else {
-        console.error("Error:", data);
-        if (data.error === "User with that email already exists")
+        if (data.error === "Email already registered")
           setEmailNotRegistered(false);
         setIsLoading(false);
       }
@@ -119,7 +119,7 @@ const SignUp = () => {
           </div>
           {!emailNotRegistered && (
             <div className="text-red-500">
-              User with that email already exists!
+              Email already registered
             </div>
           )}
           <div>

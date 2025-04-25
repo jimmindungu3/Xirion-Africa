@@ -10,15 +10,29 @@ const BASE_URL =
 const ConfirmEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [verificationCode, setverificationCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const email = location.state?.email || localStorage.getItem("email"); // Get email from state/localstorage sent from signup page
+  const email = location.state?.email || localStorage.getItem("email"); // Get email from state/localstorage
+
+  // Function to handle resending verification code
+  const handleResendCode = async () => {
+    // Placeholder for resend code functionality
+    toast.info("Requesting new verification code...");
+    // Add actual implementation here
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    // Check if email exists
+    if (!email) {
+      setError("Email not found. Please return to signup page.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -34,10 +48,17 @@ const ConfirmEmail = () => {
 
       if (response.ok) {
         localStorage.removeItem("email");
-        toast.success("Your email has been confirmed")
+        toast.success("Your email has been confirmed");
         navigate("/sign-in");
       } else {
-        setError(data.error || "Invalid code. Please try again.");
+        // Handle specific error cases to match backend
+        if (data.error.includes("expired")) {
+          setError("Verification code has expired. Please request a new one.");
+        } else if (data.error.includes("Invalid verification")) {
+          setError("Invalid verification code or email. Please try again.");
+        } else {
+          setError(data.error || "Verification failed. Please try again.");
+        }
       }
     } catch (error) {
       setError("Network error. Please try again.");
@@ -53,7 +74,7 @@ const ConfirmEmail = () => {
           Confirm Your Email
         </h1>
         <p className="text-gray-600 text-sm text-center mb-4">
-          Enter the code sent to your email.
+          Enter the code sent to {email || "your email"}.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -64,7 +85,7 @@ const ConfirmEmail = () => {
               type="text"
               name="code"
               value={verificationCode}
-              onChange={(e) => setverificationCode(e.target.value)}
+              onChange={(e) => setVerificationCode(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-none focus:outline-none focus:ring-1 focus:ring-orange-500"
               placeholder="Enter code"
               required
@@ -86,7 +107,7 @@ const ConfirmEmail = () => {
           Didn't receive a code?{" "}
           <button
             className="text-brandOrange font-semibold hover:underline"
-            onClick={() => alert("Resend code logic here")}
+            onClick={handleResendCode}
           >
             Resend Code
           </button>
