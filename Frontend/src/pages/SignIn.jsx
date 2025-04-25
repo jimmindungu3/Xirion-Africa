@@ -118,7 +118,7 @@ const SignIn = () => {
           setErrors((prev) => ({
             ...prev,
             general:
-              "Account temporarily locked due to too many failed attempts",
+              "Account temporarily locked due to too many failed attempts! Try Again after 15 minutes.",
           }));
         } else {
           // Generic error handling
