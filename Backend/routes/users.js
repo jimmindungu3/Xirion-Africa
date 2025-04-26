@@ -4,6 +4,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const signInRateLimiter = require("../middleware/signInRateLimiter");
+const { formatPhoneNumber } = require("../utils/formatters.js");
+const {
+  emailValidator,
+  phoneNumberValidator,
+  passwordValidator,
+} = require("../utils/validators.js");
+
 const {
   sendVerificationCode,
   generateVerificationCode,
@@ -47,6 +54,29 @@ router.post("/register", async (req, res) => {
         .json({ success: false, error: "Passwords don't match." });
     }
 
+    // Password strength validation
+    if (!passwordValidator(password)) {
+      return res.status(400).json({
+        success: false,
+        error:
+          "Password must be minimum 6 characters, at least one letter and one number",
+      });
+    }
+
+    if (!emailValidator(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email address",
+      });
+    }
+
+    if (!phoneNumberValidator(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid phone number",
+      });
+    }
+
     // Check if a user with the same email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -73,10 +103,10 @@ router.post("/register", async (req, res) => {
         // Only if email was successfully sent, create and save the user
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
+          firstName: firstName.trim().toUpperCase(),
+          lastName: lastName.trim().toUpperCase(),
+          email: email.trim().toLowerCase(),
+          phoneNumber: formatPhoneNumber(phoneNumber),
           verificationCode,
           password: hashedPassword,
         });
