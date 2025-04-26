@@ -74,10 +74,10 @@ const Hero = () => {
             className="px-3 py-0.5 hover:bg-gray-200 cursor-pointer rounded-md"
             onClick={() => handleCategoryClick(category.title)}
           >
-            <h3 className="text-sm font-semibold text-gray-900">
+            <h3 className="text-sm font-semibold text-gray-900 line-clamp-1">
               {category.title}
             </h3>
-            <p className="text-xs text-gray-700">{category.items}</p>
+            <p className="text-xs text-gray-700 line-clamp-2">{category.items}</p>
           </div>
         ))}
       </div>
