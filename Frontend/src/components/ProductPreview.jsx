@@ -12,12 +12,12 @@ const ProductPreview = () => {
 
   const { addToCart } = useContext(CartContext);
   const { addToWishlist } = useContext(WishlistContext);
+  const [quantity, setQuantity] = useState(1);
 
   // Set initial state
   const [selectedImage, setSelectedImage] = useState(
     product?.images?.[0] || product?.image
   );
-  const [quantity, setQuantity] = useState(1);
 
   // useEffect to update selectedImage when product changes
   useEffect(() => {
@@ -49,7 +49,7 @@ const ProductPreview = () => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex-grow max-w-7xl mx-auto px-2 pt-8 pb-2">
+        <div className="flex-grow max-w-7xl mx-auto px-2 pt-8 pb-2 mb-4">
           <div className="bg-white rounded-lg shadow-sm border p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Product Images */}
@@ -92,45 +92,67 @@ const ProductPreview = () => {
                 <p className="text-base md:text-lg font-bold text-brandOrange">
                   Ksh. {product.price.toLocaleString()}
                 </p>
-                <p className="mt-2 text-gray-600 text-sm">
+                <p className="mt-2 text-gray-800 text-sm">
                   {product.description}
                 </p>
 
-                {/* Custom Attributes Table - Updated Section */}
-                {product.customAttributes && product.customAttributes.length > 0 && (
-                  <div className="mt-4">
-                    <h3 className="text-sm md:text-base font-medium text-gray-900 mb-2">Specifications:</h3>
-                    <div className="overflow-hidden rounded-lg border border-gray-200">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <tbody className="divide-y divide-gray-200">
-                          {product.customAttributes.map((attr, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                              <td className="px-3 py-2 text-sm text-gray-600 font-semibold">{attr.attribute}</td>
-                              <td className="px-3 py-2 text-sm text-gray-900">{attr.value}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                {/* Custom Attributes Table */}
+                {product.customAttributes &&
+                  product.customAttributes.length > 0 && (
+                    <div className="mt-4">
+                      <h3 className="text-sm md:text-base font-medium text-gray-900 mb-2">
+                        Specifications:
+                      </h3>
+                      <div className="overflow-hidden rounded-lg border border-gray-200">
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <tbody className="divide-y divide-gray-200">
+                            {product.customAttributes.map((attr, index) => (
+                              <tr
+                                key={index}
+                                className={
+                                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                }
+                              >
+                                <td className="px-3 py-2 text-sm text-gray-600 font-semibold">
+                                  {attr.attribute}
+                                </td>
+                                <td className="px-3 py-2 text-sm text-gray-800">
+                                  {attr.value}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Quantity Selector */}
-                <div className="mt-6 flex items-center">
-                  <span className="mr-3 text-sm font-medium text-gray-900">
+                <div className="mt-6 flex items-center space-x-3">
+                  <span className="text-base font-semibold text-gray-700">
                     Quantity:
                   </span>
-                  <input
-                    type="number"
-                    min="1"
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value))}
-                    className="w-12 text-center border border-gray-300 rounded-lg"
-                  />
+                  <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden text-sm md:text-base">
+                    <button
+                      onClick={() =>
+                        setQuantity((prev) => Math.max(1, prev - 1))
+                      }
+                      className="px-2 py-1 text-gray-700 font-semibold bg-gray-100 hover:bg-gray-50"
+                    >
+                      −
+                    </button>
+                    <span className="px-4 py-1 text-gray-900">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                      className="px-2 py-1 text-gray-700 font-semibold bg-gray-100 hover:bg-gray-50"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
                 {/* Buttons */}
-                <div className="mt-6 flex space-x-4 md:space-x-8 font-semibold text-sm md:text-base">
+                <div className="mt-4 md:mb-2 flex space-x-4 md:space-x-8 font-semibold text-sm md:text-base">
                   <button
                     onClick={() => addToCart(product, quantity)}
                     className="flex-1 bg-brandOrange text-white rounded-lg hover:bg-orange-600 transition"
