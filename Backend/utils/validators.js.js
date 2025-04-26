@@ -32,9 +32,9 @@ function phoneNumberValidator(phone) {
 }
 
 function passwordValidator(password) {
-  // Minimum 6 characters, at least one letter and one number
-  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-  return regex.test(password);
-}
+    // Minimum 6 characters, at least one letter/number/special character
+    const regex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    return regex.test(password);
+  }
 
 module.exports = { emailValidator, phoneNumberValidator, passwordValidator };
