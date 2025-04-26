@@ -155,13 +155,13 @@ const ProductPreview = () => {
                 <div className="mt-4 md:mb-2 flex space-x-4 md:space-x-8 font-semibold text-sm md:text-base">
                   <button
                     onClick={() => addToCart(product, quantity)}
-                    className="flex-1 bg-brandOrange text-white rounded-lg hover:bg-orange-600 transition"
+                    className="flex-1 bg-brandOrange text-white rounded-lg py-2 md:py-1.5 px-1 md:px-4 hover:bg-orange-600 transition"
                   >
                     Add to Cart
                   </button>
                   <button
                     onClick={() => addToWishlist(product)}
-                    className="flex-1 border border-brandOrange text-brandOrange rounded-lg py-2 md:py-3 px-1 md:px-4 hover:bg-orange-100 transition"
+                    className="flex-1 border border-brandOrange text-brandOrange rounded-lg py-2 md:py-1.5 px-1 md:px-4 hover:bg-orange-100 transition"
                   >
                     Add to Wishlist
                   </button>
