@@ -2,15 +2,17 @@ const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const signInRateLimiter = require("../middleware/signInRateLimiter");
-const JWT_SECRET = process.env.JWT_SECRET;
-
-const router = express.Router();
-
 const {
   sendVerificationCode,
   generateVerificationCode,
 } = require("../services/sendCode");
+
+// Environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const router = express.Router();
 
 // POST /api/register - Create new user route
 router.post("/register", async (req, res) => {
@@ -33,18 +35,24 @@ router.post("/register", async (req, res) => {
       !password ||
       !confirmPassword
     ) {
-      return res.status(400).json({ error: "All fields are required." });
+      return res
+        .status(400)
+        .json({ success: false, error: "All fields are required." });
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords don't match." });
+      return res
+        .status(400)
+        .json({ success: false, error: "Passwords don't match." });
     }
 
     // Check if a user with the same email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already registered" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Email already registered" });
     }
 
     // Generate verification code
@@ -73,11 +81,11 @@ router.post("/register", async (req, res) => {
           password: hashedPassword,
         });
 
-        const savedUser = await newUser.save();
+        await newUser.save();
+
         return res.status(201).json({
           success: true,
           message: "User registered successfully. Verification code sent.",
-          savedUser,
         });
       } else {
         // Email sending failed
@@ -96,7 +104,6 @@ router.post("/register", async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Registration error:", error);
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
@@ -137,9 +144,26 @@ router.post("/verify-email", async (req, res) => {
     user.verificationCode = undefined;
     await user.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Email verified successfully." });
+    // Create token after email verification
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    const fullName = `${user.firstName} ${user.lastName}`;
+
+    // Set token as HTTP-only
+    res.cookie("xirionAuthToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully.",
+      fullName,
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: "Internal server error." });
   }
