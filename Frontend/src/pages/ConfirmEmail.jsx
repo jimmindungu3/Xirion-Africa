@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { SignedInStatusContext } from "../App";
 
 const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 const PROD_URL_BASE = import.meta.env.VITE_PROD_URL_BASE;
@@ -13,13 +15,13 @@ const ConfirmEmail = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const email = location.state?.email || localStorage.getItem("email"); // Get email from state/localstorage
+  const email = location.state?.email || localStorage.getItem("email");
 
-  // Function to handle resending verification code
+  // Get signed in status context
+  const { handleSignedInStatus } = useContext(SignedInStatusContext);
+
   const handleResendCode = async () => {
-    // Placeholder for resend code functionality
     toast.info("Requesting new verification code...");
-    // Add actual implementation here
   };
 
   const handleSubmit = async (e) => {
@@ -35,23 +37,30 @@ const ConfirmEmail = () => {
     }
 
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/users/verify-email`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ verificationCode, email }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/users/verify-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ verificationCode, email }),
+        credentials: "include",
+      });
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (data.success) {
         localStorage.removeItem("email");
-        toast.success("Your email has been confirmed");
-        navigate("/sign-in");
+
+        if (data.fullName) {
+          localStorage.setItem("userFullName", data.fullName);
+        }
+
+        // Set the signed in status to true
+        localStorage.setItem("signedInStatus", "true");
+        handleSignedInStatus();
+
+        toast.success("You have been signed in. Email verified successfully");
+        navigate("/");
       } else {
-        // Handle specific error cases to match backend
+        // Handle error cases
         if (data.error.includes("expired")) {
           setError("Verification code has expired. Please request a new one.");
         } else if (data.error.includes("Invalid verification")) {
@@ -62,6 +71,7 @@ const ConfirmEmail = () => {
       }
     } catch (error) {
       setError("Network error. Please try again.");
+      console.error("Verification error:", error);
     } finally {
       setLoading(false);
     }
