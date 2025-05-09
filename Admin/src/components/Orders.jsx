@@ -142,6 +142,34 @@ const Orders = () => {
     }
   };
 
+  // Generate background and text color styling based on order status
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
+      case "Confirmed":
+        return "bg-blue-100 text-blue-800 border border-blue-300";
+      case "Processing":
+        return "bg-indigo-100 text-indigo-800 border border-indigo-300";
+      case "Shipped":
+        return "bg-blue-400 text-white border border-blue-500";
+      case "Waiting Pick Up":
+        return "bg-purple-100 text-purple-800 border border-purple-300";
+      case "Delivered":
+        return "bg-green-100 text-green-800 border border-green-300";
+      case "Cancelled":
+        return "bg-red-100 text-red-800 border border-red-300";
+      case "Returned":
+        return "bg-orange-100 text-orange-800 border border-orange-300";
+      case "Refunded":
+        return "bg-gray-100 text-gray-800 border border-gray-300";
+      case "Failed":
+        return "bg-red-400 text-white border border-red-500";
+      default:
+        return "bg-gray-100 text-gray-800 border border-gray-300";
+    }
+  };
+
   if (loading) {
     return (
       <div className="px-4 max-w-7xl mx-auto mb-12">
@@ -237,11 +265,12 @@ const Orders = () => {
               </div>
 
               {/* Order details */}
-              <div className="text-gray-700">
+              <div>
                 <p>
-                  <span className="font-medium">Status:</span> {order.status}
+                  <span className="font-medium">Status:</span>{" "}
+                  <span className={`${getStatusStyles(order.status)} px-2 py-1 rounded-md`}>{order.status}</span>
                 </p>
-                <p>
+                <p className="mt-1">
                   <span className="font-medium">Mpesa:</span>{" "}
                   {order.mpesaConfirmationCode}
                 </p>

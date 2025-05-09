@@ -1,7 +1,21 @@
 import React, { useState } from "react";
 import { GiCircuitry } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import { HiMenu, HiX } from "react-icons/hi"; // Added icons for menu toggle
+import { HiMenu, HiX } from "react-icons/hi"; 
+import { 
+  MdDashboard, 
+  MdShoppingCart, 
+  MdUpload, 
+  MdInventory, 
+  MdAttachMoney, 
+  MdPeople, 
+  MdReviews, 
+  MdDiscount, 
+  MdSettings, 
+  MdLogout,
+  MdCategory,
+  MdAnalytics
+} from "react-icons/md"; // Importing more icons for our menu items
 
 const Nav = () => {
   // State to track whether mobile menu is open
@@ -11,6 +25,21 @@ const Nav = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Admin menu items array - makes it easier to manage and update menu items
+  const menuItems = [
+    { name: "Dashboard", icon: <MdDashboard />, path: "/dashboard" },
+    { name: "Pending Orders", icon: <MdShoppingCart />, path: "/pending-orders" },
+    { name: "Upload Product", icon: <MdUpload />, path: "/upload-product" },
+    { name: "Categories", icon: <MdCategory />, path: "/categories" },
+    { name: "Inventory", icon: <MdInventory />, path: "/inventory" },
+    { name: "Sales Reports", icon: <MdAttachMoney />, path: "/sales" },
+    { name: "Analytics", icon: <MdAnalytics />, path: "/analytics" },
+    { name: "Customers", icon: <MdPeople />, path: "/customers" },
+    { name: "Reviews", icon: <MdReviews />, path: "/reviews" },
+    { name: "Promotions", icon: <MdDiscount />, path: "/promotions" },
+    { name: "Settings", icon: <MdSettings />, path: "/settings" },
+  ];
 
   return (
     <nav className="bg-white sticky top-0 z-10 opacity-100">
@@ -35,27 +64,37 @@ const Nav = () => {
               </button>
             </div>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links - Now showing first 5 items to avoid crowding */}
             <div className="hidden md:flex items-center space-x-4 rounded-md font-semibold">
-              <Link to="/pending-orders">
-                <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-                  Pending Orders
+              {menuItems.slice(0, 5).map((item, index) => (
+                <Link to={item.path} key={index}>
+                  <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition flex items-center">
+                    <span className="mr-1">{item.icon}</span>
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+              
+              {/* More dropdown menu for desktop */}
+              <div className="relative group">
+                <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition flex items-center">
+                  More
                 </span>
-              </Link>
-              <Link to="/upload-product">
-                <span className="px-3 py-2 text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-                  Upload Product
-                </span>
-              </Link>
-              <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-                Stock
-              </span>
-              <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-                Sales
-              </span>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block">
+                  {menuItems.slice(5).map((item, index) => (
+                    <Link to={item.path} key={index}>
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition flex items-center">
+                        <span className="mr-2">{item.icon}</span>
+                        {item.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
               {/* Logout Button */}
-              <button className="ml-4 px-4 py-2 rounded-md text-sm bg-brandOrange text-white hover:bg-brandOrangeDark transition">
+              <button className="ml-4 px-4 py-2 rounded-md text-sm bg-brandOrange text-white hover:bg-brandOrangeDark transition flex items-center">
+                <MdLogout className="mr-1" />
                 Logout
               </button>
             </div>
@@ -67,29 +106,21 @@ const Nav = () => {
       {isMenuOpen && (
         <div className="md:hidden shadow-lg border-t">
           <div className="px-2 pt-2 pb-3 space-y-1 flex flex-col">
-            <Link
-              to="/pending-orders"
-              className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Pending Orders
-            </Link>
-            <Link
-              to="/upload-product"
-              className="px-3 py-2 text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Upload Product
-            </Link>
-            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-              Stock
-            </span>
-            <span className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition">
-              Sales
-            </span>
+            {menuItems.map((item, index) => (
+              <Link
+                to={item.path}
+                key={index}
+                className="px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-orange-100 cursor-pointer transition flex items-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <span className="mr-2">{item.icon}</span>
+                {item.name}
+              </Link>
+            ))}
 
             {/* Mobile Logout Button */}
-            <button className="mt-2 mx-3 px-4 py-2 rounded-md text-sm bg-brandOrange text-white hover:bg-brandOrangeDark transition">
+            <button className="mt-2 mx-3 px-4 py-2 rounded-md text-sm bg-brandOrange text-white hover:bg-brandOrangeDark transition flex items-center">
+              <MdLogout className="mr-2" />
               Logout
             </button>
           </div>

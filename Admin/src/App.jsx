@@ -9,6 +9,7 @@ import SignIn from "./components/SignIn";
 import ProductUploader from "./components/ProductUploader";
 import Orders from "./components/Orders";
 import Nav from "./components/Nav";
+import Dashboard from "./components/Dashboard";
 
 // Do not show Nav on sign in page
 const NavWrapper = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/" element={<SignIn />} />
         <Route path="/upload-product" element={<ProductUploader />} />
         <Route path="/pending-orders" element={<Orders />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
